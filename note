@@ -1,0 +1,45 @@
+Phần chưa làm
+Phần comment chưa check statusComment của sản phẩm trong order 
+Sửa phần role_id sau khi thêm tài khoản
+
+
+
+Phần đã làm
+- Trang Home
+- Trang Product: Lọc theo cate,price,rate, tìm kiếm theo title, sắp xếp theo các tiêu chí, phân trang
+- Trang Product detail bao gồm cả feedback
+- Thêm feedback cho Product
+- Hiển thị general setting
+
+Phần cần làm
+- Bên client: 
+  + Thêm, xóa sản phẩm yêu thích                                                      Success
+  + Thêm, sửa, xóa sản phẩm trong giỏ hàng có check số lượng trước khi thêm           Success
+  + Xem giỏ hàng (xem trên postman k hiển thị nhưng in ra thì có rồi)                 Success
+  + Đặt hàng                                                                          Success
+  + Thanh toán                                                                        Success
+  + Thanh tóan thành công xóa sp đã mua trong giỏ hàng, cập nhật số lượng sp còn      Sucesss
+  + Huỷ đơn hàng, cập nhật số lượng hàng sau khi hủy                                  Success
+  + Hiển thị lịch sử đơn hàng                                                         Success
+  + Hiển thị trạng thái chi tiết mua hàng (trạng thái giao, thông tin đơn đặt hàng)   Success
+  + Cập nhật mức rank sau khi mua hàng
+  + Chỉnh sửa phẩn đánh giá
+  + Trang dashboard (Giống trang tôi của shopee)
+- Bên admin :
+  + Trang dashboard bên admin
+  + Thêm, sửa, xóa danh mục sản phẩm
+  + Thêm, sửa, xóa sản phẩm
+  + Thêm, sửa, xóa nhóm quyền
+  + Phân quyền cho tài khoản
+  + Sửa trang general setting
+  + Quản lý đơn đặt hàng của khách hàng
+  + Cập nhật trạng thái giao hàng của đơn hàng
+  + Xóa phần feedback
+- Phần chung :
+  + Đăng ký                                                                           Success
+  + Đăng nhập                                                                         Success
+  + Quên mật khẩu                                                                     Success
+  + Chỉnh sửa thông tin tài khoản                                                     Success
+  + Đổi mật khẩu                                                                      Success
+  + Đăng xuất                                                                         Success
+  + Làm route private
