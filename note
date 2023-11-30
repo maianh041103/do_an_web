@@ -29,9 +29,9 @@ Phần cần làm
   + Trang dashboard bên admin
   + Thêm, sửa, xóa danh mục sản phẩm                                                  Success
   + Thêm route private
-  + Thêm, sửa, xóa sản phẩm
-  + Thêm, sửa, xóa nhóm quyền
-  + Phân quyền cho tài khoản
+  + Thêm, sửa, xóa sản phẩm                                                           Success
+  + Thêm, sửa, xóa nhóm quyền                                                         Success
+  + Phân quyền cho tài khoản                                                            
   + Sửa trang general setting
   + Quản lý đơn đặt hàng của khách hàng
   + Cập nhật trạng thái giao hàng của đơn hàng
@@ -44,3 +44,43 @@ Phần cần làm
   + Đổi mật khẩu                                                                      Success
   + Đăng xuất                                                                         Success
   + Làm route private
+
+
+- Phần phân quyền
+  products-category_view
+  products-category_create
+  products-category_edit
+  products-category_delete
+
+  products_view
+  products_create
+  products_edit
+  products_delete
+
+  roles_view
+  roles_create
+  roles_edit
+  roles_delete
+  roles_permissions
+
+  account_view
+  account_create
+  account_edit
+  account_delete
+
+  order_view
+  order_edit
+
+  comment-delete
+
+  setting-general_view
+  setting-general_edit
+
+  chat
+
+
+  "products-category_view","products-category_create","products-category_edit","products-category_delete","products_view","products_create","products_edit","products_delete","roles_view","roles_create","roles_edit","roles_delete","roles_permissions","account_view","account_create","account_edit","account_delete","order_view","order_edit","comment-delete","setting-general_view","setting-general_edit","chat"
+
+  "products-category_view","products-category_create","products-category_edit","products_view","products_create","products_edit","comment-delete"
+
+  "order_view","order_edit"
