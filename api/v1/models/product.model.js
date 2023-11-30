@@ -22,14 +22,16 @@ const productSchema = new mongoose.Schema({
   price: Number,
   stock: Number, //Số lượng còn
   quantity: Number, //Tổng số lượng => Số lượng đã bán
+  discountPercent: Number,
   featured: String,
   status: String,
   properties: Array, //chứa các thuộc tính của sản phẩm thuộc danh mục trên
   rate: Number,
   deleted: {
     type: Boolean,
-    default: ""
+    default: false
   },
+  deletedAt: Date,
   slug: {
     type: String,
     slug: "title",

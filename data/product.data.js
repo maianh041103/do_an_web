@@ -252,5 +252,24 @@
   ],
   "deleted": false,
   "slug": "thuoc-nhuom-toc-mau-hong"
+},
+{
+  "title": "Mắt kính không gọng titan",
+  "productCategoryId": "6568231693052c06b44abe39",
+  "description": "Năm niêm yết Mùa thu 2023\nNguồn cung cấp đặc biệt xuất khẩu xuyên biên giới hay không \nMàu khung: Đen, Vàng, Màu súng, Bạc\nĐối tượng áp dụng - người lớn\nChức năng ống kính: Không có chức năng đặc biệt\nXuất xứ — Thâm Quyến\nPhong cách: Kinh doanh, Thanh lịch\nCấu trúc kính: Không khung\nChất liệu ống kính | Nhựa\nCó hỗ trợ gương cận thị hay không: Có\nChất liệu khung - titan nguyên chất\nKính kiểu 'Vuông\nPhân loại phong cách - Đi lại thời trang",
+  "images": "",
+  "price": 1000,
+  "discountPercent": 10,
+  "quantity": 100,
+  "stock": 95,
+  "featured": "1",
+  "status": "active",
+  "properties": [
+    { "thương hiệu": "Kính mắt Hàn Quốc" },
+    { "loại kính": "Kính thời trang cận" },
+    { "chất liệu": "titan" },
+    { "phong cách": "năng động" },
+    { "xuất xứ": "Hàn Quốc" }
+  ]
 }
 ]
