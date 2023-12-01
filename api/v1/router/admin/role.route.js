@@ -2,16 +2,18 @@ const express = require('express');
 const route = express.Router();
 const controller = require('../../controller/admin/role.controller');
 
-route.get('/', controller.index);
+const authAdminMiddlerware = require('../../middlerwares/authAdmin.middlerware');
 
-route.post('/add', controller.add);
+route.get('/', authAdminMiddlerware.authRoleView, controller.index);
+
+route.post('/add', authAdminMiddlerware.authAccountCreate, controller.add);
 
 route.get('/detail/:id', controller.detail);
 
-route.patch('/edit/:id', controller.edit);
+route.patch('/edit/:id', authAdminMiddlerware.authAccountEdit, controller.edit);
 
-route.delete('/delete/:id', controller.deleteItem);
+route.delete('/delete/:id', authAdminMiddlerware.authRoleDelete, controller.deleteItem);
 
-route.patch('/permissions', controller.permissions);
+route.patch('/permissions', authAdminMiddlerware.authRolePermissions, controller.permissions);
 
 module.exports = route;

@@ -2,12 +2,14 @@ const express = require('express');
 const route = express.Router();
 const controller = require('../../controller/admin/category.controller');
 
-route.get('/', controller.index);
+const authAdminMiddlerware = require('../../middlerwares/authAdmin.middlerware');
 
-route.post('/add', controller.add);
+route.get('/', authAdminMiddlerware.authProductCategoryView, controller.index);
 
-route.patch('/edit/:id', controller.edit);
+route.post('/add', authAdminMiddlerware.authProductCategoryCreate, controller.add);
 
-route.delete('/delete/:id', controller.deleteItem);
+route.patch('/edit/:id', authAdminMiddlerware.authProductCategoryEdit, controller.edit);
+
+route.delete('/delete/:id', authAdminMiddlerware.authProductCategoryDelete, controller.deleteItem);
 
 module.exports = route;
