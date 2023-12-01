@@ -1,4 +1,5 @@
 const Account = require('../../models/account.model');
+const Role = require('../../models/role.model.js');
 const ForgotPassword = require('../../models/forgotPassword.model.js');
 const generateHelper = require('../../../../helper/generate.helper');
 const sendEmailHelper = require('../../../../helper/sendEmail.helper');
@@ -165,6 +166,14 @@ module.exports.reset = async (req, res) => {
 //[PATCH] /api/v1/account/detail
 module.exports.detail = async (req, res) => {
   try {
+    const role = await Role.findOne({
+      deleted: false,
+      _id: req.user.role_id
+    }).select("title permissions");
+    if (role) {
+      req.user.role = role;
+    }
+    console.log(req.user.role);
     res.json({
       userInfo: req.user
     });
