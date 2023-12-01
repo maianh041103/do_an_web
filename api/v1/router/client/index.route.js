@@ -9,9 +9,11 @@ const checkoutRoute = require('./checkout.route');
 const historyPurchaseRoute = require('./historyPurchase.route');
 
 const authMiddlerware = require('../../middlerwares/auth.middlerware');
+const updateStatusOrderMiddlerware = require('../../middlerwares/updateOrderStatus.middlerware');
 
 module.exports = (app) => {
   const version = '/api/v1';
+  app.use(updateStatusOrderMiddlerware.updateOrderStatus);
   app.use(version + '/', homeRoute);
   app.use(version + '/products', productRoute);
   app.use(version + '/general', generalRoute);

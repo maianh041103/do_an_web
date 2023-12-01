@@ -2,7 +2,6 @@ const Order = require('../../models/order.model');
 const Cart = require('../../models/cart.model');
 const Product = require('../../models/product.model');
 
-const updateStatusOrderHelper = require('../../../../helper/updateStatusOrder');
 const getStockProductByIdHelper = require('../../../../helper/getStockProductById');
 
 //[GET] /api/v1/historyPurchase
@@ -50,11 +49,6 @@ module.exports.detail = async (req, res) => {
 module.exports.cancel = async (req, res) => {
   try {
     const orderId = req.params.orderId;
-
-    //Cập nhật trạng thái giao hàng
-    await updateStatusOrderHelper.update(orderId);
-    //End cập nhật trạng thái giao hàng
-
     const order = await Order.findOne({
       _id: orderId,
       statusOrder: { $lt: 4 }
