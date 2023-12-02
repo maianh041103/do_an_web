@@ -1,6 +1,9 @@
 const Product = require("../../models/product.model");
 const ProductCategory = require('../../models/productCategory.model');
 const FeedBack = require('../../models/feedback.model');
+const Order = require('../../models/order.model');
+const Cart = require('../../models/cart.model');
+const Account = require('../../models/account.model');
 
 const treeHelper = require('../../../../helper/createTree.helper');
 const subCategoryHelper = require('../../../../helper/subCategory.helper');
@@ -102,12 +105,28 @@ module.exports.detail = async (req, res) => {
       productId: req.params.id
     });
 
+    for (const feedback of feedbacks) {
+      const order = await Order.findOne({
+        _id: feedback.orderId,
+        deleted: false,
+      });
+      const cart = await Cart.findOne({
+        _id: order.cart_id,
+        deleted: false
+      });
+      const account = await Account.findOne({
+        _id: cart.account_id
+      });
+      feedback.fullName = account.fullName;
+    }
+
     res.json({
       code: 200,
       product: product,
       feedbacks: feedbacks
     })
   } catch (error) {
+    console.log(error);
     res.json({
       code: 400,
       message: "Không tìm thấy sản phẩm"

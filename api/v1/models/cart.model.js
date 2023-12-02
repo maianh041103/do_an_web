@@ -8,7 +8,11 @@ const cartSchema = new mongoose.Schema({
       childTitle: String,
       quantity: Number
     }
-  ]
+  ],
+  deleted: {
+    type: Boolean,
+    default: false
+  }
 }, {
   timestamps: true
 })
