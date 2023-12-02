@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const feedBackSchema = new mongoose.Schema({
   productId: String,
-  accountId: String,
+  orderId: String,
   comment: String,
   rate: Number,
   //status: String,
