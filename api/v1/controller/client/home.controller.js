@@ -3,6 +3,7 @@ const Product = require('../../models/product.model');
 const SettingGeneral = require('../../models/settingGeneral.model');
 
 const productsBestSellerHelper = require('../../../../helper/productBestSeller.helper');
+const calcPriceNewHelper = require('../../../../helper/calcPriceNew.helper');
 
 //[GET] /api/v1/
 module.exports.index = async (req, res) => {
@@ -20,6 +21,10 @@ module.exports.index = async (req, res) => {
   })
 
   for (let product of productsBestSellers) {
+    product = calcPriceNewHelper.calc(product);
+  }
+
+  for (let product of productsBestSellers) {
     product.productSold = productsBestSellerHelper.productSold(product);
   }
 
@@ -34,6 +39,10 @@ module.exports.index = async (req, res) => {
     status: "active",
     featured: "1"
   })
+
+  for (let product of productFeatureds) {
+    product = calcPriceNewHelper.calc(product);
+  }
   //End lấy ra sản phẩm nổi bật 
 
   res.json({

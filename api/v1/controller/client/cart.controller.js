@@ -3,32 +3,38 @@ const Cart = require('../../models/cart.model');
 const Product = require('../../models/product.model');
 
 const getStockProductByIdHelper = require('../../../../helper/getStockProductById');
+const calcPriceNewHelper = require('../../../../helper/calcPriceNew.helper');
 
 //[GET] /api/v1/cart/
+//Có cách in trong node
 module.exports.index = async (req, res) => {
   const cart = await Cart.findOne({
     account_id: req.user.id
   });
 
+  //Truyền vào product_id in ra giá mới, giá cũ, giảm giá,...
   for (let i = 0; i < cart.products.length; i++) {
-    const productData = await Product.findOne({
+    let productData = await Product.findOne({
       _id: cart.products[i].product_id,
       deleted: false
     });
     if (cart.products[i].childTitle === "none") {
+      productData = calcPriceNewHelper.calc(productData);
       cart.products[i].infoProduct = productData;
     } else {
-      const productChild = productData.group.find(item => {
+      let productChild = productData.group.find(item => {
         return item.childTitle === cart.products[i].childTitle;
       })
       const data = await Product.findOne({
         _id: cart.products[i].product_id,
         deleted: false
       }).select("-group");
+      productChild.priceNew = (productChild.price * (100 - data.discountPercent) / 100).toFixed(0);
       data.productChild = productChild;
       cart.products[i].infoProduct = data;
     }
   }
+  //End
 
   // for (let i = 0; i < cart.products.length; i++) {
   //   console.log(cart.products[i].infoProduct.productChild);

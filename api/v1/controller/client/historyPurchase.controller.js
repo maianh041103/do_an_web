@@ -16,6 +16,19 @@ module.exports.view = async (req, res) => {
       deleted: false
     });
 
+    //Tính giá mới
+    for (const order of listOrder) {
+      for (let product of order.products) {
+        if (product.discountPercent) {
+          product.priceNew = (product.price * (100 - product.discountPercent) / 100).toFixed(0);
+        }
+        else {
+          product.priceNew = product.price;
+        }
+      }
+    }
+    //End tính giá mới
+
     res.json({
       historyPurchase: listOrder
     })
@@ -31,13 +44,27 @@ module.exports.view = async (req, res) => {
 module.exports.detail = async (req, res) => {
   try {
     const id = req.params.id;
-    const orderDetail = await Order.find({
-      _id: id
+    const orderDetail = await Order.findOne({
+      _id: id,
+      deleted: false
     });
+
+    //Tính giá mới
+    for (let product of orderDetail.products) {
+      if (product.discountPercent) {
+        product.priceNew = (product.price * (100 - product.discountPercent) / 100).toFixed(0);
+      }
+      else {
+        product.priceNew = product.price;
+      }
+    }
+    //End tính giá mới
+
     res.json({
       orderDetail: orderDetail
     });
   } catch (error) {
+    console.log(error);
     res.json({
       code: 400,
       message: "Mã đơn hàng không hợp lệ"

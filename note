@@ -24,7 +24,10 @@ Phần cần làm
   + Hiển thị trạng thái chi tiết mua hàng (trạng thái giao, thông tin đơn đặt hàng)   Success
   + Cập nhật mức rank sau khi mua hàng
   + Chỉnh sửa phẩn đánh giá                                                           Success
-  + Thêm discountPercent cho sản phẩm, lưu giá mới
+  + Thêm discountPercent cho sản phẩm, lưu giá mới                                    Success
+        product-detail , product-compare , home , historyPurchase-view , 
+        historyPurchase- detail, cart-view, checkout-success, 
+        product-view-admin
   + Trang dashboard (Giống trang tôi của shopee)
 - Bên admin :
   + Trang dashboard bên admin

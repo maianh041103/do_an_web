@@ -10,6 +10,7 @@ const subCategoryHelper = require('../../../../helper/subCategory.helper');
 const paginationHelper = require('../../../../helper/pagination.helper');
 const searchHelper = require('../../../../helper/search.helper');
 const minMaxPrice = require('../../../../helper/minMaxPrice.helper');
+const calcPriceNew = require('../../../../helper/calcPriceNew.helper');
 
 //[GET] /api/v1/products
 //?sortKey=""&sortValue=""&search=""&priceMax=""&priceMin=""&rate=""&category=""&page=""&limit=""
@@ -94,11 +95,13 @@ module.exports.index = async (req, res) => {
 //[GET] /api/v1/products/detail/:id
 module.exports.detail = async (req, res) => {
   try {
-    const product = await Product.findOne({
+    let product = await Product.findOne({
       deleted: false,
       status: "active",
       _id: req.params.id
     });
+
+    product = calcPriceNew.calc(product);
 
     const feedbacks = await FeedBack.find({
       deleted: false,
@@ -120,6 +123,14 @@ module.exports.detail = async (req, res) => {
       feedback.fullName = account.fullName;
     }
 
+    // if (product.group.length > 0) {
+    //   for (const item of product.group) {
+    //     console.log(item.priceNew);
+    //   }
+    // } else {
+    //   console.log(product.priceNew);
+    // }
+
     res.json({
       code: 200,
       product: product,
@@ -137,9 +148,14 @@ module.exports.detail = async (req, res) => {
 //[GET] /api/v1/products/compare
 module.exports.compare = async (req, res) => {
   const ids = req.body.ids;
-  const products = await Product.find({
+  let products = await Product.find({
     _id: { $in: ids }
   });
+
+  for (let product of products) {
+    product = calcPriceNew.calc(product);
+  }
+
   res.json({
     code: 200,
     products: products

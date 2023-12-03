@@ -75,13 +75,19 @@ module.exports.order = async (req, res) => {
         _id: products[i].product_id,
         deleted: false
       });
+      if (!productData.discountPercent)
+        productData.discountPercent = 0;
       if (products[i].childTitle === "none") {
         products[i].price = productData.price;
+        products[i].discountPercent = productData.discountPercent;
+        products[i].priceNew = parseInt((products[i].price * (100 - products[i].discountPercent) / 100).toFixed(0));
       } else {
         const productChild = productData.group.find(item => {
           return item.childTitle === products[i].childTitle;
         })
         products[i].price = productChild.price;
+        products[i].discountPercent = productData.discountPercent;
+        products[i].priceNew = parseInt((products[i].price * (100 - products[i].discountPercent) / 100).toFixed(0));
       }
     }
 
@@ -93,7 +99,7 @@ module.exports.order = async (req, res) => {
         address: req.body.address
       },
       products: products,
-      discountId: req.body.discountId,
+      discountId: req.body.discountId
     }
 
     const newOrder = new Order(data);

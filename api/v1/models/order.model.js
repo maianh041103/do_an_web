@@ -13,6 +13,7 @@ const orderSchema = mongoose.Schema({
       childTitle: String,
       quantity: Number,
       price: Number,
+      discountPercent: Number,
       statusComment: {
         type: Number,
         default: 0

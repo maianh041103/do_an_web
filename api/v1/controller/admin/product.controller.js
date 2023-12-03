@@ -1,11 +1,16 @@
 const Product = require('../../models/product.model');
 
+const calcPriceNewHelper = require('../../../../helper/calcPriceNew.helper');
+
 //[GET] /admin/products/
 module.exports.index = async (req, res) => {
   try {
     const listProducts = await Product.find({
       deleted: false
     });
+    for (let product of listProducts) {
+      product = calcPriceNewHelper.calc(product);
+    }
     res.json({
       listProducts: listProducts
     });
