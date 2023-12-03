@@ -13,8 +13,14 @@ const accountSchema = new mongoose.Schema({
   phone: String,
   address: String,
   avatar: String,
-  role_id: String,
-  status: String,
+  role_id: {
+    type: String,
+    default: "6568a9f308e5088688d1c345"
+  },
+  status: {
+    type: String,
+    default: "active"
+  },
   rank: {
     type: Number,
     default: 0

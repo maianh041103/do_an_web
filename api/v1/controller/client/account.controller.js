@@ -12,8 +12,6 @@ module.exports.register = async (req, res) => {
     const data = req.body;
     data.password = md5(data.password);
     data.token = generateHelper.generateRandomString(20);
-    data.status = "active";
-    data.role_id = "id_user";
     const newAccount = new Account(data);
     await newAccount.save();
     res.cookie("token", data.token);

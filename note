@@ -16,15 +16,16 @@ Phần cần làm
   + Huỷ đơn hàng, cập nhật số lượng hàng sau khi hủy                                  Success
   + Hiển thị lịch sử đơn hàng                                                         Success
   + Hiển thị trạng thái chi tiết mua hàng (trạng thái giao, thông tin đơn đặt hàng)   Success
-  + Cập nhật mức rank sau khi mua hàng
+  + Cập nhật mức rank sau khi mua hàng                                                Success
   + Chỉnh sửa phẩn đánh giá                                                           Success
   + Thêm discountPercent cho sản phẩm, lưu giá mới                                    Success
         product-detail , product-compare , home , historyPurchase-view , 
         historyPurchase- detail, cart-view, checkout-success, 
         product-view-admin
   + Phần comment chưa check statusComment của sản phẩm trong order                    Success
-  + Sửa phần role_id sau khi thêm tài khoản
+  + Sửa phần role_id sau khi thêm tài khoản                                           Success
   + Trang dashboard (Giống trang tôi của shopee)
+  + Upload ảnh
 - Bên admin :
   + Trang dashboard bên admin
   + Thêm, sửa, xóa danh mục sản phẩm                                                  Success
@@ -38,6 +39,7 @@ Phần cần làm
   + Cập nhật trạng thái giao hàng của đơn hàng                                        Success
   + Xóa phần feedback
   + Ghi log lịch sử
+  + Upload ảnh
 - Phần chung :
   + Đăng ký                                                                           Success
   + Đăng nhập                                                                         Success
