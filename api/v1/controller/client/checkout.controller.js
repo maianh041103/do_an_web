@@ -4,37 +4,37 @@ const Cart = require('../../models/cart.model');
 const Order = require('../../models/order.model');
 
 const getStockProductByIdHelper = require('../../../../helper/getStockProductById');
+const calcPriceNewHelper = require('../../../../helper/calcPriceNew.helper');
 
 //[GET] /api/v1/checkout
 module.exports.checkout = async (req, res) => {
   //Lấy ra sản phẩm 
-  // const listProductId = req.body.products;
+  let totalPrice = 0; //Lưu tổng số tiền trước khi áp mã giảm giá
+  const listProductId = req.body.products;
 
-  // for (let i = 0; i < listProductId.length; i++) {
-  //   const productData = await Product.findOne({
-  //     _id: listProductId[i].product_id,
-  //     deleted: false
-  //   });
-  //   if (listProductId[i].childTitle === "none") {
-  //     listProductId[i].infoProduct = productData;
-  //   } else {
-  //     const productChild = productData.group.find(item => {
-  //       return item.childTitle === listProductId[i].childTitle;
-  //     })
-  //     const data = await Product.findOne({
-  //       _id: listProductId[i].product_id,
-  //       deleted: false
-  //     }).select("-group");
-  //     data.productChild = productChild;
-  //     listProductId[i].infoProduct = data;
-  //   }
-  // }
+  for (let i = 0; i < listProductId.length; i++) {
+    let productData = await Product.findOne({
+      _id: listProductId[i].product_id,
+      deleted: false
+    });
 
-  // for (let i = 0; i < listProductId.length; i++) {
-  //   console.log(listProductId[i].infoProduct);
-  //   console.log(listProductId[i].infoProduct.productChild);
-  // }
-
+    productData = calcPriceNewHelper.calc(productData);
+    if (listProductId[i].childTitle === "none") {
+      listProductId[i].infoProduct = productData;
+      totalPrice += listProductId[i].infoProduct.priceNew * listProductId[i].quantity;
+    } else {
+      const productChild = productData.group.find(item => {
+        return item.childTitle === listProductId[i].childTitle;
+      })
+      const data = await Product.findOne({
+        _id: listProductId[i].product_id,
+        deleted: false
+      }).select("-group");
+      data.productChild = productChild;
+      listProductId[i].infoProduct = data;
+      totalPrice += listProductId[i].infoProduct.productChild.priceNew * listProductId[i].quantity;
+    }
+  }
   //End lấy ra sản phẩm
 
   //Lấy ra mã giảm giá 
@@ -55,7 +55,8 @@ module.exports.checkout = async (req, res) => {
   //End lấy ra mã giảm giá
 
   res.json({
-    // listProductId: listProductId,
+    totalPrice: totalPrice,
+    listProductId: listProductId,
     listDiscount: listDiscount,
     user: req.user
     //Gửi thông tin user để điền trước lên form (user có thể sửa thông tin giao hàng hoặc không)

@@ -15,7 +15,10 @@ const accountSchema = new mongoose.Schema({
   avatar: String,
   role_id: String,
   status: String,
-  rank: Number,
+  rank: {
+    type: Number,
+    default: 0
+  },
   deleted: {
     type: Boolean,
     default: false

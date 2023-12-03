@@ -6,7 +6,7 @@ const discountSchema = new mongoose.Schema({
   discountPercent: Number,
   conditionRank: {
     type: Number,
-    default: 0 // Bac: 1, Vang:2, KC:3 ,...
+    default: 0 //Đồng:0, bạc:1, vàng:2, kim cương:3 
   },
   specialDay: {
     type: "String",
