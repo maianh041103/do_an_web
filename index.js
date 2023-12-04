@@ -5,6 +5,16 @@ require('dotenv').config();
 
 const app = express();
 
+//Nhúng cors
+const cors = require('cors');
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+}
+app.use(cors(corsOptions));
+
+//End nhúng cors
+
 //Nhúng body-parser
 app.use(bodyParser.json())
 //End nhúng body-parser
