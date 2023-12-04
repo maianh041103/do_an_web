@@ -81,6 +81,7 @@ module.exports.index = async (req, res) => {
     .sort(sort);
 
   for (let product of products) {
+    product = calcPriceNew.calc(product);
     product.buyed = productsBestSellerHelper.productSold(product);
     const productCategory = await ProductCategory.findOne({
       _id: product.productCategoryId,
