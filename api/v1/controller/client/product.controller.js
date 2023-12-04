@@ -125,6 +125,8 @@ module.exports.detail = async (req, res) => {
     else
       product.productCategoryTitle = "";
 
+    console.log(product.productCategoryTitle);
+
     product = calcPriceNew.calc(product);
 
     const feedbacks = await FeedBack.find({
