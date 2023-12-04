@@ -11,6 +11,7 @@ const paginationHelper = require('../../../../helper/pagination.helper');
 const searchHelper = require('../../../../helper/search.helper');
 const minMaxPrice = require('../../../../helper/minMaxPrice.helper');
 const calcPriceNew = require('../../../../helper/calcPriceNew.helper');
+const productsBestSellerHelper = require('../../../../helper/productBestSeller.helper');
 
 //[GET] /api/v1/products
 //?sortKey=""&sortValue=""&search=""&priceMax=""&priceMin=""&rate=""&category=""&page=""&limit=""
@@ -79,6 +80,18 @@ module.exports.index = async (req, res) => {
     .limit(objectPagination.limit)
     .sort(sort);
 
+  for (let product of products) {
+    product.buyed = productsBestSellerHelper.productSold(product);
+    const productCategory = await ProductCategory.findOne({
+      _id: product.productCategoryId,
+      deleted: false
+    });
+    if (productCategory)
+      product.productCategoryTitle = productCategory.title;
+    else
+      product.productCategoryTitle = "";
+  }
+
   //Min max price
   const minPrice = parseInt(req.query.minPrice) || 0;
   const maxPrice = parseInt(req.query.maxPrice) || 100000000000000000000000;
@@ -100,6 +113,16 @@ module.exports.detail = async (req, res) => {
       status: "active",
       _id: req.params.id
     });
+
+    product.buyed = productsBestSellerHelper.productSold(product);
+    const productCategory = await ProductCategory.findOne({
+      _id: product.productCategoryId,
+      deleted: false
+    });
+    if (productCategory)
+      product.productCategoryTitle = productCategory.title;
+    else
+      product.productCategoryTitle = "";
 
     product = calcPriceNew.calc(product);
 
@@ -154,6 +177,15 @@ module.exports.compare = async (req, res) => {
 
   for (let product of products) {
     product = calcPriceNew.calc(product);
+    product.buyed = productsBestSellerHelper.productSold(product);
+    const productCategory = await ProductCategory.findOne({
+      _id: product.productCategoryId,
+      deleted: false
+    });
+    if (productCategory)
+      product.productCategoryTitle = productCategory.title;
+    else
+      product.productCategoryTitle = "";
   }
 
   res.json({
