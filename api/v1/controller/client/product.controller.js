@@ -115,26 +115,51 @@ module.exports.detail = async (req, res) => {
       _id: req.params.id
     });
 
-    product.buyed = productsBestSellerHelper.productSold(product);
+    let newProduct = {
+      _id: product.id,
+      title: product.title,
+      description: product.description,
+      images: product.images,
+      group: product.group,
+      price: product.price,
+      stock: product.stock,
+      quantity: product.quantity,
+      featured: product.featured,
+      status: product.status,
+      properties: product.properties,
+      deleted: product.deleted,
+      slug: product.slug,
+      rate: product.rate,
+      discountPercent: product.discountPercent
+    }
+
+    newProduct.buyed = productsBestSellerHelper.productSold(newProduct);
     const productCategory = await ProductCategory.findOne({
       _id: product.productCategoryId,
       deleted: false
     });
     if (productCategory)
-      product.productCategoryTitle = productCategory.title;
+      newProduct.productCategoryTitle = productCategory.title;
     else
-      product.productCategoryTitle = "";
+      newProduct.productCategoryTitle = "";
 
-    console.log(product.productCategoryTitle);
-
-    product = calcPriceNew.calc(product);
+    newProduct = calcPriceNew.calc(newProduct);
 
     const feedbacks = await FeedBack.find({
       deleted: false,
       productId: req.params.id
     });
 
+    let newFeedbacks = [];
+
     for (const feedback of feedbacks) {
+      let newFeedback = {
+        productId: feedback.productId,
+        orderId: feedback.orderId,
+        comment: feedback.comment,
+        rate: feedback.rate,
+        deleted: feedback.deleted,
+      }
       const order = await Order.findOne({
         _id: feedback.orderId,
         deleted: false,
@@ -146,22 +171,16 @@ module.exports.detail = async (req, res) => {
       const account = await Account.findOne({
         _id: cart.account_id
       });
-      feedback.fullName = account.fullName;
+      newFeedback.fullName = account.fullName;
+      newFeedbacks.push(newFeedback);
     }
-
-    // if (product.group.length > 0) {
-    //   for (const item of product.group) {
-    //     console.log(item.priceNew);
-    //   }
-    // } else {
-    //   console.log(product.priceNew);
-    // }
 
     res.json({
       code: 200,
-      product: product,
-      feedbacks: feedbacks
+      newProduct: newProduct,
+      newFeedbacks: newFeedbacks
     })
+
   } catch (error) {
     console.log(error);
     res.json({
