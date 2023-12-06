@@ -1,5 +1,5 @@
 const ProductCategory = require('../../models/productCategory.model');
-
+const Account = require('../../models/account.model');
 const createTreeHelper = require('../../../../helper/createTree.helper');
 
 //[GET] /admin/productCategory
@@ -17,6 +17,78 @@ module.exports.index = async (req, res) => {
       code: 400,
       message: "Không tìm thấy danh mục sản phẩm"
     })
+  }
+}
+
+//[GET] /admin/productCategory/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const productCategory = await ProductCategory.findOne({
+      _id: req.params.id,
+      deleted: false
+    });
+    let newProductCategory = {
+      title: productCategory.title,
+      description: productCategory.description,
+      image: productCategory.image,
+      status: productCategory.status,
+      position: productCategory.position,
+      properties: productCategory.properties, //chứa các thuộc tính của sản phẩm thuộc danh mục trên
+      deleted: productCategory.deleted,
+      deletedAt: productCategory.deletedAt,
+      slug: productCategory.slug,
+    }
+    if (productCategory.parentId) {
+      const productCategoryParent = await ProductCategory.findOne({
+        _id: productCategory.parentId,
+        deleted: false
+      });
+      if (productCategoryParent)
+        newProductCategory.parentName = productCategoryParent.title;
+    }
+    if (productCategory.createdBy) {
+      const accountCreate = await Account.findOne({
+        _id: productCategory.createdBy.account_id
+      });
+      if (accountCreate) {
+        newProductCategory.createdBy = {
+          accountName: accountCreate.fullName,
+          createdAt: productCategory.createdBy.createdAt
+        }
+      }
+    }
+    if (productCategory.updatedBy) {
+      const accountUpdate = await Account.findOne({
+        _id: productCategory.updatedBy.account_id
+      });
+      if (accountUpdate) {
+        newProductCategory.updatedBy = {
+          accountName: accountUpdate.fullName,
+          updatedAt: productCategory.updatedAt.updatedAt
+        }
+      }
+    }
+    if (productCategory.deletedBy) {
+      const accountDelete = await Account.findOne({
+        _id: productCategory.deletedBy.account_id
+      });
+      if (accountDelete) {
+        newProductCategory.deletedBy = {
+          accountName: accountDelete.fullName,
+          deletedAt: productCategory.deletedAt.deletedAt
+        }
+      }
+    }
+    res.json({
+      code: 200,
+      productCategory: newProductCategory
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      code: 400,
+      message: "Không tìm được danh mục sản phẩm"
+    });
   }
 }
 

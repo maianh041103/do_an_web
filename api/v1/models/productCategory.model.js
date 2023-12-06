@@ -31,15 +31,13 @@ const productCategorySchema = new mongoose.Schema({
       default: new Date()
     }
   },
-  updatedBy: [
-    {
-      account_id: String,
-      updatedAt: Date
-    }
-  ],
+  updatedBy: {
+    account_id: String,
+    updatedAt: Date
+  },
   deletedBy: {
     account_id: String,
-    updatedBy: Date
+    deletedAt: Date
   }
 })
 

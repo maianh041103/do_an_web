@@ -6,6 +6,8 @@ const authAdminMiddlerware = require('../../middlerwares/authAdmin.middlerware')
 
 route.get('/', authAdminMiddlerware.authProductCategoryView, controller.index);
 
+route.get('/detail/:id', authAdminMiddlerware.authProductCategoryView, controller.detail);
+
 route.post('/add', authAdminMiddlerware.authProductCategoryCreate, controller.add);
 
 route.patch('/edit/:id', authAdminMiddlerware.authProductCategoryEdit, controller.edit);
