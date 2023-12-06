@@ -45,10 +45,18 @@ module.exports.index = async (req, res) => {
   }
   //End lấy ra sản phẩm nổi bật 
 
+  //Lấy ra sản phẩm sắp xếp theo rate
+  const productBestRate = await Product.find({
+    deleted: false,
+    status: "active"
+  }).sort({ rate: "desc" }).limit(3);
+  ///End lấy sản phẩm sản phẩm theo rate
+
   res.json({
     productCategorys: productCategorys,
     productsBestSellers: productsBestSellers, //Mảng sản phẩm sắp xếp theo số lượng đã bán giảm dẫn
     productFeatureds: productFeatureds,
+    productBestRate: productBestRate
   });
 
 
