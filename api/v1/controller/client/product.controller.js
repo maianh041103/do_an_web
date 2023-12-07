@@ -90,23 +90,42 @@ module.exports.index = async (req, res) => {
     .limit(objectPagination.limit)
     .sort(sort);
 
-  for (let product of products) {
-    product = calcPriceNew.calc(product);
-    product.buyed = productsBestSellerHelper.productSold(product);
+  let newResultProduct = [];
+  for (let product of resultProduct) {
+    let newProduct = {
+      _id: product.id,
+      title: product.title,
+      description: product.description,
+      images: product.images,
+      group: product.group,
+      price: product.price,
+      stock: product.stock,
+      quantity: product.quantity,
+      featured: product.featured,
+      status: product.status,
+      properties: product.properties,
+      deleted: product.deleted,
+      slug: product.slug,
+      rate: product.rate,
+      discountPercent: product.discountPercent
+    }
+
+    newProduct = calcPriceNew.calc(newProduct);
+    newProduct.buyed = productsBestSellerHelper.productSold(newProduct);
     const productCategory = await ProductCategory.findOne({
       _id: product.productCategoryId,
       deleted: false
     });
     if (productCategory)
-      product.productCategoryTitle = productCategory.title;
+      newProduct.productCategoryTitle = productCategory.title;
     else
-      product.productCategoryTitle = "";
+      newProduct.productCategoryTitle = "";
+    newResultProduct.push(newProduct);
   }
-
 
   res.json({
     totalPage: countProducts,
-    products: resultProduct,
+    products: newResultProduct,
     productCategory: productCategory
   })
 }
