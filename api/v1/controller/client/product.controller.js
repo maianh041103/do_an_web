@@ -106,7 +106,7 @@ module.exports.index = async (req, res) => {
 
   res.json({
     totalPage: countProducts,
-    products: products,
+    products: resultProduct,
     productCategory: productCategory
   })
 }
