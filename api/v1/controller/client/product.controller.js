@@ -14,7 +14,7 @@ const calcPriceNew = require('../../../../helper/calcPriceNew.helper');
 const productsBestSellerHelper = require('../../../../helper/productBestSeller.helper');
 
 //[GET] /api/v1/products
-//?sortKey=""&sortValue=""&search=""&priceMax=""&priceMin=""&rate=""&category=""&page=""&limit=""
+//?sortKey=""&sortValue=""&search=""&priceMax=""&priceMin=""&rate=""&categoryParent=""&categoryChild=""&page=""&limit=""
 module.exports.index = async (req, res) => {
   const find = {
     deleted: false,
@@ -29,25 +29,12 @@ module.exports.index = async (req, res) => {
   productCategory = treeHelper.createTree(productCategory, "");
   //End lấy category hiển thị hình cây
 
-  //SearchParams
-  console.log(req.query);
-  //End searchParams
-
   //Search
   if (req.query.search) {
     const seachObject = searchHelper(req.query);
     find.title = seachObject.regex;
   }
   //End Search
-
-  //Pagination
-  const countProducts = await Product.countDocuments(find);
-  let objectPagination = {
-    limit: 2,
-    currentPage: 1
-  }
-  objectPagination = paginationHelper(objectPagination, req.query, countProducts);
-  //End pagination
 
   //Sort
   sortKey = req.query.sortKey;
@@ -66,17 +53,40 @@ module.exports.index = async (req, res) => {
   //End rate filter
 
   //Category Filter
-  const category = req.query.category;
-  if (category) {
-    const listCategoryChildren = await subCategoryHelper.subCategory(category, ProductCategory);
+  const categoryChild = req.query.categoryChild;
+  const categoryParent = req.query.categoryParent;
+  if (categoryChild) {
+    const listCategoryChild = categoryChild.split(",");
+    find["productCategoryId"] = { $in: listCategoryChild };
+  }
+  else if (categoryParent) {
+    const listCategoryChildren = await subCategoryHelper.subCategory(categoryParent, ProductCategory);
     const listCategoryChildrenId = listCategoryChildren.map(item => item.id);
-    listCategoryChildrenId.push(category);
+    listCategoryChildrenId.push(categoryParent);
     find["productCategoryId"] = { $in: listCategoryChildrenId };
   }
   //End Category Filter
 
+  //Min max price
   let products = await Product.find(find)
-    .skip(objectPagination.skip)
+  const minPrice = parseInt(req.query.minPrice) || 0;
+  const maxPrice = parseInt(req.query.maxPrice) || 100000000000000000000000;
+  products = minMaxPrice(products, minPrice, maxPrice);
+  const listProductId = products.map(item => item.id);
+  //End min max price
+
+  //Pagination
+  const countProducts = listProductId.length;
+  let objectPagination = {
+    limit: 2,
+    currentPage: 1
+  }
+  objectPagination = paginationHelper(objectPagination, req.query, countProducts);
+  //End pagination
+
+  let resultProduct = await Product.find({
+    _id: { $in: listProductId }
+  }).skip(objectPagination.skip)
     .limit(objectPagination.limit)
     .sort(sort);
 
@@ -93,11 +103,6 @@ module.exports.index = async (req, res) => {
       product.productCategoryTitle = "";
   }
 
-  //Min max price
-  const minPrice = parseInt(req.query.minPrice) || 0;
-  const maxPrice = parseInt(req.query.maxPrice) || 100000000000000000000000;
-  products = minMaxPrice(products, minPrice, maxPrice);
-  //End min max price
 
   res.json({
     totalPage: countProducts,
