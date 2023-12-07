@@ -50,6 +50,7 @@ Phần cần làm
   + Làm route private                                                                 Success
   + Trả thêm phần tên quyền là permissions                                            Success
 
+- Sửa phần lấy lại dữ liệu : product, favorite
 
 - Phần phân quyền
   products-category_view

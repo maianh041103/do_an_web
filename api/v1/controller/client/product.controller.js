@@ -228,21 +228,43 @@ module.exports.compare = async (req, res) => {
     _id: { $in: ids }
   });
 
+  let newResultProduct = [];
   for (let product of products) {
-    product = calcPriceNew.calc(product);
-    product.buyed = productsBestSellerHelper.productSold(product);
+    let newProduct = {
+      _id: product.id,
+      title: product.title,
+      description: product.description,
+      images: product.images,
+      price: product.price,
+      stock: product.stock,
+      quantity: product.quantity,
+      group: product.group,
+      featured: product.featured,
+      status: product.status,
+      properties: product.properties,
+      deleted: product.deleted,
+      slug: product.slug,
+      rate: product.rate,
+      discountPercent: product.discountPercent
+    }
+
+    newProduct = calcPriceNew.calc(newProduct);
+
+    newProduct.minPrice = minPriceHelper.findMinPrice(newProduct);
+
+    newProduct.buyed = productsBestSellerHelper.productSold(newProduct);
     const productCategory = await ProductCategory.findOne({
       _id: product.productCategoryId,
       deleted: false
     });
     if (productCategory)
-      product.productCategoryTitle = productCategory.title;
+      newProduct.productCategoryTitle = productCategory.title;
     else
-      product.productCategoryTitle = "";
+      newProduct.productCategoryTitle = "";
+    newResultProduct.push(newProduct);
   }
-
   res.json({
     code: 200,
-    products: products
+    products: newResultProduct
   })
 }
