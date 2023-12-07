@@ -1,7 +1,7 @@
 module.exports.findMinPrice = (item) => {
-  let minPrice = 0;
-  if (item.group && item.group.length > 0) {
-    item.group.forEach(childItem => {
+  let minPrice = 10000000000000000;
+  if (item.newGroup && item.newGroup.length > 0) {
+    item.newGroup.forEach(childItem => {
       if (childItem.priceNew < minPrice) {
         minPrice = childItem.priceNew
       }

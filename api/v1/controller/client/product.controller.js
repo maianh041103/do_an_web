@@ -74,10 +74,7 @@ module.exports.index = async (req, res) => {
   const maxPrice = parseInt(req.query.maxPrice) || 100000000000000000000000;
   products = minMaxPrice(products, minPrice, maxPrice);
   const listProductId = products.map(item => item.id);
-  console.log(listProductId);
   //End min max price
-
-
 
   //Pagination
   const countProducts = listProductId.length;
@@ -104,6 +101,7 @@ module.exports.index = async (req, res) => {
       price: product.price,
       stock: product.stock,
       quantity: product.quantity,
+      group: product.group,
       featured: product.featured,
       status: product.status,
       properties: product.properties,
@@ -115,11 +113,7 @@ module.exports.index = async (req, res) => {
 
     newProduct = calcPriceNew.calc(newProduct);
 
-    // console.log(newProduct);
-
-
-    let result = minPriceHelper.findMinPrice(newProduct);
-    //console.log(result);
+    newProduct.minPrice = minPriceHelper.findMinPrice(newProduct);
 
     newProduct.buyed = productsBestSellerHelper.productSold(newProduct);
     const productCategory = await ProductCategory.findOne({
@@ -134,7 +128,7 @@ module.exports.index = async (req, res) => {
   }
 
   res.json({
-    totalPage: countProducts,
+    countRecord: countProducts,
     products: newResultProduct,
     productCategory: productCategory
   })

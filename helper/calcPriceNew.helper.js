@@ -19,7 +19,6 @@ module.exports.calc = (product) => {
         newGroup.push(groupChild);
       }
       product.newGroup = newGroup;
-      console.log(product.newGroup);
     }
   } else {
     product.priceNew = parseFloat((product.price * (100 - product.discountPercent) / 100).toFixed(0));
