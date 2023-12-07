@@ -174,7 +174,6 @@ module.exports.detail = async (req, res) => {
       newProduct.productCategoryTitle = productCategory.title;
     else
       newProduct.productCategoryTitle = "";
-    newResultProduct.push(newProduct);
 
     const feedbacks = await FeedBack.find({
       deleted: false,
