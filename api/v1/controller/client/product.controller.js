@@ -148,10 +148,10 @@ module.exports.detail = async (req, res) => {
       title: product.title,
       description: product.description,
       images: product.images,
-      group: product.group,
       price: product.price,
       stock: product.stock,
       quantity: product.quantity,
+      group: product.group,
       featured: product.featured,
       status: product.status,
       properties: product.properties,
@@ -160,6 +160,10 @@ module.exports.detail = async (req, res) => {
       rate: product.rate,
       discountPercent: product.discountPercent
     }
+
+    newProduct = calcPriceNew.calc(newProduct);
+
+    newProduct.minPrice = minPriceHelper.findMinPrice(newProduct);
 
     newProduct.buyed = productsBestSellerHelper.productSold(newProduct);
     const productCategory = await ProductCategory.findOne({
@@ -170,8 +174,7 @@ module.exports.detail = async (req, res) => {
       newProduct.productCategoryTitle = productCategory.title;
     else
       newProduct.productCategoryTitle = "";
-
-    newProduct = calcPriceNew.calc(newProduct);
+    newResultProduct.push(newProduct);
 
     const feedbacks = await FeedBack.find({
       deleted: false,
