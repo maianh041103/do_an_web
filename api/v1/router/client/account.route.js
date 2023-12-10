@@ -23,7 +23,7 @@ route.patch('/forgot/reset', controller.reset);
 
 route.get('/detail', authMiddlerware.authMiddler, controller.detail);
 
-route.patch('/uploadImage', upload.single('avatar'), uploadClound.upload, authMiddlerware.authMiddler, controller.uploadImage);
+route.patch('/uploadImage', upload.single('avatar'), uploadClound.uploadSingle, authMiddlerware.authMiddler, controller.uploadImage);
 
 route.patch('/edit', authMiddlerware.authMiddler, controller.edit);
 
