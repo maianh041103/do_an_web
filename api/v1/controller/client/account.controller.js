@@ -187,20 +187,15 @@ module.exports.detail = async (req, res) => {
 //[PATCH] /api/v1/account/uploadImage
 module.exports.uploadImage = async (req, res) => {
   try {
-    await Account.updateOne({
-      token: req.user.token
-    }, {
-      avatar: req.body.avatar
-    });
     res.json({
       code: 200,
-      message: "Cập nhật ảnh đại diện thành công",
+      message: "Upload ảnh thành công",
       avatar: req.body.avatar
     });
   } catch (error) {
     res.json({
       code: 400,
-      message: "Cập nhật ảnh đại diện thất bại"
+      message: "Upload ảnh thất bại"
     });
   }
 }
