@@ -10,9 +10,8 @@ const subCategoryHelper = require('../../../../helper/subCategory.helper');
 const paginationHelper = require('../../../../helper/pagination.helper');
 const searchHelper = require('../../../../helper/search.helper');
 const minMaxPrice = require('../../../../helper/minMaxPrice.helper');
-const calcPriceNew = require('../../../../helper/calcPriceNew.helper');
-const productsBestSellerHelper = require('../../../../helper/productBestSeller.helper');
-const minPriceHelper = require('../../../../helper/findMinPrice.helper');
+const getListProductHelper = require('../../../../helper/getListProduct.helper');
+const getProductHelper = require('../../../../helper/getProduct.helper');
 
 //[GET] /api/v1/products
 //?sortKey=""&sortValue=""&search=""&priceMax=""&priceMin=""&rate=""&categoryParent=""&categoryChild=""&page=""&limit=""
@@ -91,41 +90,7 @@ module.exports.index = async (req, res) => {
     .limit(objectPagination.limit)
     .sort(sort);
 
-  let newResultProduct = [];
-  for (let product of resultProduct) {
-    let newProduct = {
-      _id: product.id,
-      title: product.title,
-      description: product.description,
-      images: product.images,
-      price: product.price,
-      stock: product.stock,
-      quantity: product.quantity,
-      group: product.group,
-      featured: product.featured,
-      status: product.status,
-      properties: product.properties,
-      deleted: product.deleted,
-      slug: product.slug,
-      rate: product.rate,
-      discountPercent: product.discountPercent
-    }
-
-    newProduct = calcPriceNew.calc(newProduct);
-
-    newProduct.minPrice = minPriceHelper.findMinPrice(newProduct);
-
-    newProduct.buyed = productsBestSellerHelper.productSold(newProduct);
-    const productCategory = await ProductCategory.findOne({
-      _id: product.productCategoryId,
-      deleted: false
-    });
-    if (productCategory)
-      newProduct.productCategoryTitle = productCategory.title;
-    else
-      newProduct.productCategoryTitle = "";
-    newResultProduct.push(newProduct);
-  }
+    let newResultProduct = await getListProductHelper.getListProduct(resultProduct);
 
   res.json({
     countRecord: countProducts,
@@ -143,37 +108,7 @@ module.exports.detail = async (req, res) => {
       _id: req.params.id
     });
 
-    let newProduct = {
-      _id: product.id,
-      title: product.title,
-      description: product.description,
-      images: product.images,
-      price: product.price,
-      stock: product.stock,
-      quantity: product.quantity,
-      group: product.group,
-      featured: product.featured,
-      status: product.status,
-      properties: product.properties,
-      deleted: product.deleted,
-      slug: product.slug,
-      rate: product.rate,
-      discountPercent: product.discountPercent
-    }
-
-    newProduct = calcPriceNew.calc(newProduct);
-
-    newProduct.minPrice = minPriceHelper.findMinPrice(newProduct);
-
-    newProduct.buyed = productsBestSellerHelper.productSold(newProduct);
-    const productCategory = await ProductCategory.findOne({
-      _id: product.productCategoryId,
-      deleted: false
-    });
-    if (productCategory)
-      newProduct.productCategoryTitle = productCategory.title;
-    else
-      newProduct.productCategoryTitle = "";
+    let newProduct = await getProductHelper.getProduct(product);
 
     const feedbacks = await FeedBack.find({
       deleted: false,
@@ -227,41 +162,7 @@ module.exports.compare = async (req, res) => {
     _id: { $in: ids }
   });
 
-  let newResultProduct = [];
-  for (let product of products) {
-    let newProduct = {
-      _id: product.id,
-      title: product.title,
-      description: product.description,
-      images: product.images,
-      price: product.price,
-      stock: product.stock,
-      quantity: product.quantity,
-      group: product.group,
-      featured: product.featured,
-      status: product.status,
-      properties: product.properties,
-      deleted: product.deleted,
-      slug: product.slug,
-      rate: product.rate,
-      discountPercent: product.discountPercent
-    }
-
-    newProduct = calcPriceNew.calc(newProduct);
-
-    newProduct.minPrice = minPriceHelper.findMinPrice(newProduct);
-
-    newProduct.buyed = productsBestSellerHelper.productSold(newProduct);
-    const productCategory = await ProductCategory.findOne({
-      _id: product.productCategoryId,
-      deleted: false
-    });
-    if (productCategory)
-      newProduct.productCategoryTitle = productCategory.title;
-    else
-      newProduct.productCategoryTitle = "";
-    newResultProduct.push(newProduct);
-  }
+  let newResultProduct = await getListProductHelper.getListProduct(products);
   res.json({
     code: 200,
     products: newResultProduct

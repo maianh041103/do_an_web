@@ -90,3 +90,15 @@ Phần cần làm
   "products-category_view","products-category_create","products-category_edit","products_view","products_create","products_edit","comment-delete"
 
   "order_view","order_edit"
+
+
+
+- Sửa
+ + Product detail
+ + Home
+
+
+
+
+- Chú ý : 
+ + Hàm getListProductHelper là hàm async await

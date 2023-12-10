@@ -4,6 +4,7 @@ const SettingGeneral = require('../../models/settingGeneral.model');
 
 const productsBestSellerHelper = require('../../../../helper/productBestSeller.helper');
 const calcPriceNewHelper = require('../../../../helper/calcPriceNew.helper');
+const getListProductHelper = require('../../../../helper/getListProduct.helper');
 
 //[GET] /api/v1/
 module.exports.index = async (req, res) => {
@@ -15,20 +16,14 @@ module.exports.index = async (req, res) => {
   //End lấy ra danh mục sản phẩm
 
   //Lấy ra sản phẩm bán chạy nhất
-  const productsBestSellers = await Product.find({
+  const productBestSellers = await Product.find({
     deleted: false,
     status: "active"
   })
 
-  for (let product of productsBestSellers) {
-    product = calcPriceNewHelper.calc(product);
-  }
+  let newProductBestSellers = await getListProductHelper.getListProduct(productBestSellers);
 
-  for (let product of productsBestSellers) {
-    product.productSold = productsBestSellerHelper.productSold(product);
-  }
-
-  productsBestSellers.sort((a, b) => {
+  newProductBestSellers.sort((a, b) => {
     return b.productSold - a.productSold;
   })
   //End lấy ra sp bán chạy nhất
@@ -40,9 +35,7 @@ module.exports.index = async (req, res) => {
     featured: "1"
   })
 
-  for (let product of productFeatureds) {
-    product = calcPriceNewHelper.calc(product);
-  }
+  let newProductFeatureds = await getListProductHelper.getListProduct(productFeatureds);
   //End lấy ra sản phẩm nổi bật 
 
   //Lấy ra sản phẩm sắp xếp theo rate
@@ -50,13 +43,15 @@ module.exports.index = async (req, res) => {
     deleted: false,
     status: "active"
   }).sort({ rate: "desc" }).limit(3);
+  
+  let newProductBestRate = await getListProductHelper.getListProduct(productBestRate);
   ///End lấy sản phẩm sản phẩm theo rate
 
   res.json({
     productCategorys: productCategorys,
-    productsBestSellers: productsBestSellers, //Mảng sản phẩm sắp xếp theo số lượng đã bán giảm dẫn
-    productFeatureds: productFeatureds,
-    productBestRate: productBestRate
+    productBestSellers: newProductBestSellers, //Mảng sản phẩm sắp xếp theo số lượng đã bán giảm dẫn
+    productFeatureds: newProductFeatureds,
+    productBestRate: newProductBestRate
   });
 
 
