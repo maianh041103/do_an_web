@@ -4,6 +4,7 @@ const Product = require("../../models/product.model");
 const calcPriceNew = require('../../../../helper/calcPriceNew.helper');
 const productsBestSellerHelper = require('../../../../helper/productBestSeller.helper');
 const minPriceHelper = require('../../../../helper/findMinPrice.helper');
+const getProductHelper = require('../../../../helper/getProduct.helper');
 
 //[GET] /api/v1/favorite
 module.exports.index = async (req, res) => {
@@ -15,27 +16,8 @@ module.exports.index = async (req, res) => {
     const product = await Product.findOne({
       _id: item
     });
-    let newProduct = {
-      _id: product.id,
-      title: product.title,
-      description: product.description,
-      images: product.images,
-      price: product.price,
-      stock: product.stock,
-      quantity: product.quantity,
-      group: product.group,
-      featured: product.featured,
-      status: product.status,
-      properties: product.properties,
-      deleted: product.deleted,
-      slug: product.slug,
-      rate: product.rate,
-      discountPercent: product.discountPercent
-    }
-
-    newProduct = calcPriceNew.calc(newProduct);
-    newProduct.minPrice = minPriceHelper.findMinPrice(newProduct);
-    newProduct.buyed = productsBestSellerHelper.productSold(newProduct);
+    
+    let newProduct = await getProductHelper.getProduct(product);
     listProduct.push(newProduct);
   }
   res.json({
