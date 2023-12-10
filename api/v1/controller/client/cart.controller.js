@@ -4,44 +4,63 @@ const Product = require('../../models/product.model');
 
 const getStockProductByIdHelper = require('../../../../helper/getStockProductById');
 const calcPriceNewHelper = require('../../../../helper/calcPriceNew.helper');
+const getProductHelper = require('../../../../helper/getProduct.helper');
 
 //[GET] /api/v1/cart/
-//Có cách in trong node
 module.exports.index = async (req, res) => {
   const cart = await Cart.findOne({
     account_id: req.user.id
   });
 
   //Truyền vào product_id in ra giá mới, giá cũ, giảm giá,...
+  let products = [];
   for (let i = 0; i < cart.products.length; i++) {
+    let product = {
+      product_id: cart.products[i].product_id,
+      childTitle: cart.products[i].childTitle,
+      quantity: cart.products[i].quantity
+    }
     let productData = await Product.findOne({
       _id: cart.products[i].product_id,
       deleted: false
     });
-    if (cart.products[i].childTitle === "none") {
-      productData = calcPriceNewHelper.calc(productData);
-      cart.products[i].infoProduct = productData;
-    } else {
-      let productChild = productData.group.find(item => {
+    productData = await getProductHelper.getProduct(productData);
+    let newProductData = {
+      title: productData.title,
+      description: productData.description,
+      images: productData.images,
+      price: productData.price,
+      stock: productData.stock,
+      quantity: productData.quantity,
+      featured: productData.featured,
+      status: productData.status,
+      properties: productData.properties,
+      deleted: productData.deleted,
+      slug: productData.slug,
+      rate: productData.rate,
+      discountPercent: productData.discountPercent,
+      //minPrice: productData.minPrice,
+      //buyed: productData.buyed,
+      productCategoryTitle: productData.productCategoryTitle
+    }
+    if (cart.products[i].childTitle !== "none") {
+      let productChild = productData.newGroup.find(item => {
         return item.childTitle === cart.products[i].childTitle;
       })
-      const data = await Product.findOne({
-        _id: cart.products[i].product_id,
-        deleted: false
-      }).select("-group");
-      productChild.priceNew = (productChild.price * (100 - data.discountPercent) / 100).toFixed(0);
-      data.productChild = productChild;
-      cart.products[i].infoProduct = data;
+      newProductData.productChild = productChild;
     }
-  }
+    product.infoProduct = newProductData;
+    products.push(product);
+    }
   //End
 
-  // for (let i = 0; i < cart.products.length; i++) {
-  //   console.log(cart.products[i].infoProduct.productChild);
-  // }
+  let newCart = {
+    account_id: cart.account_id,
+    products: products
+  }
 
   res.json({
-    cart: cart
+    cart: newCart
   })
 }
 
@@ -143,7 +162,6 @@ module.exports.update = async (req, res) => {
     const quantity = req.body.quantity;
 
     const stock = await getStockProductByIdHelper.getStockById(productId, childTitle);
-    console.log(stock);
 
     if (stock < quantity) {
       res.json({
