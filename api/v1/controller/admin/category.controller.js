@@ -1,6 +1,9 @@
 const ProductCategory = require('../../models/productCategory.model');
+const Product = require('../../models/product.model');
 const Account = require('../../models/account.model');
+
 const createTreeHelper = require('../../../../helper/createTree.helper');
+const subCategoryHelper = require('../../../../helper/subCategory.helper');
 
 //[GET] /admin/productCategory
 module.exports.index = async (req, res) => {
@@ -137,12 +140,38 @@ module.exports.edit = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
   try {
     const id = req.params.id;
+
+    //Lấy danh mục con thuộc danh mục vừa xóa
+    let listProductCategory = await subCategoryHelper.subCategory(id, ProductCategory);
+    let listProductCategoryId = listProductCategory.map(item => {
+      return item.id;
+    })
+    listProductCategoryId.push(id);
+    //End lấy danh mục con thuộc danh mục vừa xóa
+
+    //Xóa danh mục và xóa con của danh mục đó
     await ProductCategory.updateOne({
-      _id: id
+      _id: { $in: listProductCategoryId }
     }, {
       deleted: true,
       deletedAt: new Date()
     });
+    //End xóa danh mục và xóa con của danh mục đó
+
+    // Xóa sản phẩm thuộc danh mục đó
+    const products = await Product.find({
+      productCategoryId: { $in: listProductCategoryId }
+    });
+    const listProductId = products.map(item => item.id);
+
+    await Product.updateMany({
+      _id: { $in: listProductId }
+    }, {
+      deleted: true,
+      deletedAt: new Date()
+    });
+    // End xóa sản phẩm thuộc danh mục đó
+
     res.json({
       code: 200,
       message: "Xóa danh mục sản phẩm thành công"
