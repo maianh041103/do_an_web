@@ -51,7 +51,7 @@ module.exports.index = async (req, res) => {
     }
     product.infoProduct = newProductData;
     products.push(product);
-    }
+  }
   //End
 
   let newCart = {
@@ -194,7 +194,7 @@ module.exports.update = async (req, res) => {
   }
 }
 
-//[DELETE] /api/v1/cart/delete
+//[PATCH] /api/v1/cart/delete
 module.exports.delete = async (req, res) => {
   try {
     const productId = req.body.id;
