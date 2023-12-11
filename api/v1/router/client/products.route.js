@@ -7,6 +7,6 @@ route.get('/', controller.index);
 
 route.get('/detail/:id', controller.detail);
 
-route.get('/compare', controller.compare);
+route.post('/compare', controller.compare);
 
 module.exports = route;

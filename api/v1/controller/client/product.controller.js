@@ -47,7 +47,10 @@ module.exports.index = async (req, res) => {
     //End Sort
 
     //Rate filter
-    if (req.query.rate) {
+    if (!req.query.rate) {
+      find["rate"] = { $gte: 0 }
+    }
+    else {
       const rate = parseFloat(req.query.rate);
       find["rate"] = { $gte: rate }
     }
@@ -169,7 +172,7 @@ module.exports.compare = async (req, res) => {
   try {
     let ids = req.body.ids;
     ids = ids.split(",");
-    console.log(ids);
+
     let products = await Product.find({
       _id: { $in: ids }
     });

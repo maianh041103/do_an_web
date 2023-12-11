@@ -7,7 +7,7 @@ const getStockProductByIdHelper = require('../../../../helper/getStockProductByI
 const calcPriceNewHelper = require('../../../../helper/calcPriceNew.helper');
 const getProductHelper = require('../../../../helper/getProduct.helper');
 
-//[GET] /api/v1/checkout
+//[POST] /api/v1/checkout
 module.exports.checkout = async (req, res) => {
   //Lấy ra sản phẩm 
   let totalPrice = 0; //Lưu tổng số tiền trước khi áp mã giảm giá
