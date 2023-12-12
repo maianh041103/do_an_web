@@ -3,7 +3,7 @@ const controller = require('../../controller/client/checkout.controller');
 
 const route = express.Router();
 
-route.get('/', controller.checkout);
+route.post('/', controller.checkout);
 
 route.post('/success', controller.order);
 

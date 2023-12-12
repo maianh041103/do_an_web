@@ -9,7 +9,7 @@ const getProductHelper = require('../../../../helper/getProduct.helper');
 
 const getListProductHelper = require('../../../../helper/getListProduct.helper');
 
-//[GET] /api/v1/checkout
+//[POST] /api/v1/checkout
 module.exports.checkout = async (req, res) => {
   //Lấy ra sản phẩm 
   const listProduct = req.body.products;
