@@ -106,7 +106,7 @@ module.exports.order = async (req, res) => {
     res.json({
       code: 200,
       message: "Đặt hàng thành công",
-      data: data
+      data: newOrder
     });
   } catch (error) {
     console.log(error);
