@@ -68,6 +68,7 @@ module.exports.order = async (req, res) => {
       },
       products: products,
       discountId: req.body.discountId,
+      paymentMethod: req.body.paymentMethod
     }
 
     const newOrder = new Order(data);

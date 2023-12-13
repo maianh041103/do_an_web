@@ -27,6 +27,7 @@ const orderSchema = mongoose.Schema({
     type: Number,
     default: 0
   },
+  paymentMethod: String,
   deleted: {
     type: Boolean,
     default: false
