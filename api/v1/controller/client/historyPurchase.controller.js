@@ -3,6 +3,7 @@ const Cart = require('../../models/cart.model');
 const Product = require('../../models/product.model');
 
 const getStockProductByIdHelper = require('../../../../helper/getStockProductById');
+const getListProductHelper = require('../../../../helper/getListProduct.helper');
 
 //[GET] /api/v1/historyPurchase
 module.exports.view = async (req, res) => {
@@ -17,20 +18,25 @@ module.exports.view = async (req, res) => {
     });
 
     //Tính giá mới
+    let newListOrder = [];
     for (const order of listOrder) {
-      for (let product of order.products) {
-        if (product.discountPercent) {
-          product.priceNew = (product.price * (100 - product.discountPercent) / 100).toFixed(0);
-        }
-        else {
-          product.priceNew = product.price;
-        }
+      let products = await getListProductHelper.getListProductsCart(order.products);
+      let newOrder = {
+        cart_id: order.cart_id,
+        userInfo: order.userInfo,
+        products: products,
+        discountId: String,
+        statusOrder: order.statusOrder,
+        paymentMethod: order.paymentMethod,
+        deleted: order.deleted,
+        updateTime: order.updateTime
       }
+      newListOrder.push(newOrder);
     }
     //End tính giá mới
 
     res.json({
-      historyPurchase: listOrder
+      historyPurchase: newListOrder
     })
   } catch (error) {
     res.json({
