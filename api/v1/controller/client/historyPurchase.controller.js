@@ -1,6 +1,7 @@
 const Order = require('../../models/order.model');
 const Cart = require('../../models/cart.model');
 const Product = require('../../models/product.model');
+const Discount = require('../../models/discount.model');
 
 const getStockProductByIdHelper = require('../../../../helper/getStockProductById');
 const getListProductHelper = require('../../../../helper/getListProduct.helper');
@@ -56,6 +57,11 @@ module.exports.detail = async (req, res) => {
       deleted: false
     });
 
+    const discountDetail = await Discount.findOne({
+      _id: orderDetail.discountId,
+      deleted: false
+    }).select("title description discountPercent conditionRank specialDay");
+
     //Tính giá mới
     let products = await getListProductHelper.getListProductsCart(orderDetail.products);
     let newOrderDetail = {
@@ -64,6 +70,7 @@ module.exports.detail = async (req, res) => {
       userInfo: orderDetail.userInfo,
       products: products,
       discountId: orderDetail.discountId,
+      discountDetail: discountDetail,
       statusOrder: orderDetail.statusOrder,
       paymentMethod: orderDetail.paymentMethod,
       deleted: orderDetail.deleted,
