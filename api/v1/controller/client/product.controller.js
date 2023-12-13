@@ -141,15 +141,17 @@ module.exports.detail = async (req, res) => {
         _id: feedback.orderId,
         deleted: false,
       });
-      const cart = await Cart.findOne({
-        _id: order.cart_id,
-        deleted: false
-      });
-      const account = await Account.findOne({
-        _id: cart.account_id
-      });
-      newFeedback.fullName = account.fullName;
-      newFeedbacks.push(newFeedback);
+      if (order) {
+        const cart = await Cart.findOne({
+          _id: order.cart_id,
+          deleted: false
+        });
+        const account = await Account.findOne({
+          _id: cart.account_id
+        });
+        newFeedback.fullName = account.fullName;
+        newFeedbacks.push(newFeedback);
+      }
     }
 
     res.json({
