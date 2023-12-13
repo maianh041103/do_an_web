@@ -20,14 +20,27 @@ module.exports.create = async (req, res) => {
       await feedback.save();
 
       //Cập nhật lại trạng thái đánh giá
-      await Order.updateOne({
-        _id: req.body.orderId,
-        "products.product_id": req.body.productId
-      }, {
-        $set: {
-          "products.$.statusComment": 0
-        }
-      });
+      if (req.body.childTitle !== "none") {
+        await Order.updateOne({
+          _id: req.body.orderId,
+          "products.product_id": req.body.productId,
+          "products.childTitle": req.body.childTitle
+        }, {
+          $set: {
+            "products.$.statusComment": 0
+          }
+        });
+      }
+      else {
+        await Order.updateOne({
+          _id: req.body.orderId,
+          "products.product_id": req.body.productId
+        }, {
+          $set: {
+            "products.$.statusComment": 0
+          }
+        });
+      }
       //End cập nhật trạng thái đánh giá 
 
       //Cập nhật rate sản phẩm
