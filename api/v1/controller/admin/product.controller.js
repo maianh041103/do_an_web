@@ -1,5 +1,4 @@
 const Product = require('../../models/product.model');
-
 const calcPriceNewHelper = require('../../../../helper/calcPriceNew.helper');
 
 //[GET] /admin/products/
@@ -25,7 +24,7 @@ module.exports.index = async (req, res) => {
 //[POST] /admin/products/add
 module.exports.add = async (req, res) => {
   try {
-    if (req.body.group > 0) {
+    if (req.body.group && req.body.group.length > 0) {
       for (let i = 0; i < req.body.group.length; i++) {
         req.body.group[i].price = parseInt(req.body.group[i].price);
         req.body.group[i].stock = parseInt(req.body.group[i].stock);
@@ -37,7 +36,15 @@ module.exports.add = async (req, res) => {
       req.body.stock = parseInt(req.body.stock);
       req.body.quantity = parseInt(req.body.quantity);
     }
-    req.body.discountPercent = parseInt(req.body.discountPercent);
+    if (req.body.discountPercent) {
+      req.body.discountPercent = parseInt(req.body.discountPercent);
+    }
+
+    req.body.createdBy = {
+      account_id: req.user.id,
+      createdAt: new Date()
+    }
+
     const newProduct = new Product(req.body);
     await newProduct.save();
     res.json({
@@ -56,7 +63,7 @@ module.exports.add = async (req, res) => {
 //[PATCH] /admin/products/edit/:id
 module.exports.edit = async (req, res) => {
   try {
-    if (req.body.group > 0) {
+    if (req.body.group && req.body.group.length > 0) {
       for (let i = 0; i < req.body.group.length; i++) {
         if (req.body.group[i].price)
           req.body.group[i].price = parseInt(req.body.group[i].price);
@@ -76,6 +83,12 @@ module.exports.edit = async (req, res) => {
     }
     if (req.body.discountPercent)
       req.body.discountPercent = parseInt(req.body.discountPercent);
+
+    req.body.updatedBy = {
+      account_id: req.user.id,
+      updatedAt: new Date()
+    }
+
     await Product.updateOne({
       _id: req.params.id
     }, req.body);
@@ -101,7 +114,11 @@ module.exports.delete = async (req, res) => {
       _id: req.params.id
     }, {
       deleted: true,
-      deletedAt: new Date()
+      deletedAt: new Date(),
+      deletedBy: {
+        account_id: req.user.id,
+        deletedAt: new Date()
+      }
     });
     res.json({
       code: 200,

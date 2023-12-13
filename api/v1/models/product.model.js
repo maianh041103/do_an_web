@@ -44,12 +44,10 @@ const productSchema = new mongoose.Schema({
       createdAt: new Date()
     }
   },
-  updatedBy: [
-    {
-      account_id: String,
-      updatedAt: Date
-    }
-  ],
+  updatedBy: {
+    account_id: String,
+    updatedAt: Date
+  },
   deletedBy: {
     account_id: String,
     deletedAt: Date
