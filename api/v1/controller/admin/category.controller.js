@@ -98,7 +98,11 @@ module.exports.detail = async (req, res) => {
 //[POST] /admin/productCategory/add
 module.exports.add = async (req, res) => {
   try {
-    const data = req.body;
+    let data = req.body;
+    data.createdBy = {
+      account_id: req.user.id,
+      createdAt: new Date()
+    }
     const newProductCategory = new ProductCategory(data);
     await newProductCategory.save();
     res.json({
@@ -118,6 +122,10 @@ module.exports.edit = async (req, res) => {
   try {
     const id = req.params.id;
     const dataUpdate = req.body;
+    dataUpdate.updatedBy = {
+      account_id: req.user.id,
+      updatedAt: new Date()
+    }
     await ProductCategory.updateOne({
       _id: id
     }, dataUpdate);
@@ -154,7 +162,11 @@ module.exports.deleteItem = async (req, res) => {
       _id: { $in: listProductCategoryId }
     }, {
       deleted: true,
-      deletedAt: new Date()
+      deletedAt: new Date(),
+      deletedBy: {
+        account_id: req.user.id,
+        deletedAt: new Date()
+      }
     });
     //End xóa danh mục và xóa con của danh mục đó
 
