@@ -1,5 +1,6 @@
 const Product = require('../../models/product.model');
 const calcPriceNewHelper = require('../../../../helper/calcPriceNew.helper');
+const getListProductHelper = require('../../../../helper/getListProduct.helper');
 
 //[GET] /admin/products/
 module.exports.index = async (req, res) => {
@@ -7,13 +8,12 @@ module.exports.index = async (req, res) => {
     const listProducts = await Product.find({
       deleted: false
     });
-    for (let product of listProducts) {
-      product = calcPriceNewHelper.calc(product);
-    }
+    const newListProducts = await getListProductHelper.getListProductAdmin(listProducts);
     res.json({
-      listProducts: listProducts
+      listProducts: newListProducts
     });
   } catch (error) {
+    console.log(error);
     res.json({
       code: 400,
       message: "Tìm kiếm danh sách sản phẩm thất bại"

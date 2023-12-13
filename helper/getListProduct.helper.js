@@ -1,5 +1,6 @@
 const ProductCategory = require('../api/v1/models/productCategory.model');
 const Product = require('../api/v1/models/product.model');
+const Account = require('../api/v1/models/account.model');
 
 const calcPriceNew = require('./calcPriceNew.helper');
 const minPriceHelper = require('./findMinPrice.helper');
@@ -97,4 +98,70 @@ module.exports.getListProductsCart = async (listProductId) => {
     products.push(product);
   }
   return products;
+}
+
+module.exports.getListProductAdmin = async (products) => {
+  let resultProduct = [];
+  for (let product of products) {
+    let newProduct = {
+      _id: product.id,
+      title: product.title,
+      description: product.description,
+      images: product.images,
+      price: product.price,
+      stock: product.stock,
+      quantity: product.quantity,
+      group: product.group,
+      featured: product.featured,
+      status: product.status,
+      properties: product.properties,
+      deleted: product.deleted,
+      slug: product.slug,
+      rate: product.rate,
+      discountPercent: product.discountPercent,
+      deletedBy: {
+        account_id: product.deletedBy.account_id,
+        deletedAt: product.deletedBy.deletedAt
+      }
+    }
+
+
+    const accountCreated = await Account.findOne({
+      _id: product.createdBy.account_id
+    }).select("fullName");
+    if (accountCreated) {
+      newProduct.createdBy = {
+        fullName: accountCreated.fullName,
+        account_id: product.createdBy.account_id,
+        createdAt: product.createdBy.createdAt
+      };
+    }
+
+    const accountUpdated = await Account.findOne({
+      _id: product.updatedBy.account_id
+    }).select("fullName");
+    if (accountUpdated) {
+      newProduct.updatedBy = {
+        fullName: accountUpdated.fullName,
+        account_id: product.updatedBy.account_id,
+        updatedAt: product.updatedBy.updatedAt
+      };
+    }
+
+    newProduct = calcPriceNew.calc(newProduct);
+
+    newProduct.minPrice = minPriceHelper.findMinPrice(newProduct);
+
+    newProduct.buyed = productsBestSellerHelper.productSold(newProduct);
+    const productCategory = await ProductCategory.findOne({
+      _id: product.productCategoryId,
+      deleted: false
+    });
+    if (productCategory)
+      newProduct.productCategoryTitle = productCategory.title;
+    else
+      newProduct.productCategoryTitle = "";
+    resultProduct.push(newProduct);
+  }
+  return resultProduct;
 }
