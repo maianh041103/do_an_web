@@ -33,6 +33,10 @@ const orderSchema = mongoose.Schema({
     default: false
   },
   deletedAt: Date,
+  updatedBy: {
+    account_id: String,
+    updatedAt: Date
+  },
   updateTime: {
     type: Date,
     default: new Date()
