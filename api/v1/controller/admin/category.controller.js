@@ -11,11 +11,58 @@ module.exports.index = async (req, res) => {
     let listCategory = await ProductCategory.find({
       deleted: false
     });
-    listCategory = createTreeHelper.createTree(listCategory);
+
+    let newListCategory = [];
+
+    for (let category of listCategory) {
+      let newCategory = {
+        id: category.id,
+        title: category.title,
+        parentId: category.parentId,
+        description: category.description,
+        image: category.image,
+        status: category.status,
+        properties: category.properties,
+        deleted: category.deleted,
+        slug: category.slug
+      }
+
+      if (category.createdBy.account_id) {
+        const account = await Account.findOne({
+          _id: category.createdBy.account_id
+        }).select("fullName");
+        if (account) {
+          newCategory.createdBy = {
+            fullName: account.fullName,
+            account_id: category.createdBy.account_id,
+            createdAt: category.createdBy.createdAt
+          }
+        }
+      }
+
+      if (category.updatedBy.account_id) {
+        const account = await Account.findOne({
+          _id: category.updatedBy.account_id
+        }).select("fullName");
+        if (account) {
+          newCategory.updatedBy = {
+            fullName: account.fullName,
+            account_id: category.updatedBy.account_id,
+            updatedAt: category.updatedBy.updatedAt
+          }
+        }
+      }
+      newListCategory.push(newCategory);
+    }
+
+    newListCategory = createTreeHelper.createTree(newListCategory);
+
     res.json({
-      productCategory: listCategory
+      productCategory: newListCategory
     });
+
   } catch (error) {
+    console.log(error);
     res.json({
       code: 400,
       message: "Không tìm thấy danh mục sản phẩm"
