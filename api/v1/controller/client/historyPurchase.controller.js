@@ -22,10 +22,11 @@ module.exports.view = async (req, res) => {
     for (const order of listOrder) {
       let products = await getListProductHelper.getListProductsCart(order.products);
       let newOrder = {
+        id: order.id,
         cart_id: order.cart_id,
         userInfo: order.userInfo,
         products: products,
-        discountId: String,
+        discountId: order.discountId,
         statusOrder: order.statusOrder,
         paymentMethod: order.paymentMethod,
         deleted: order.deleted,
@@ -56,18 +57,22 @@ module.exports.detail = async (req, res) => {
     });
 
     //Tính giá mới
-    for (let product of orderDetail.products) {
-      if (product.discountPercent) {
-        product.priceNew = (product.price * (100 - product.discountPercent) / 100).toFixed(0);
-      }
-      else {
-        product.priceNew = product.price;
-      }
+    let products = await getListProductHelper.getListProductsCart(orderDetail.products);
+    let newOrderDetail = {
+      id: orderDetail.id,
+      cart_id: orderDetail.cart_id,
+      userInfo: orderDetail.userInfo,
+      products: products,
+      discountId: orderDetail.discountId,
+      statusOrder: orderDetail.statusOrder,
+      paymentMethod: orderDetail.paymentMethod,
+      deleted: orderDetail.deleted,
+      updateTime: orderDetail.updateTime
     }
     //End tính giá mới
 
     res.json({
-      orderDetail: orderDetail
+      orderDetail: newOrderDetail
     });
   } catch (error) {
     console.log(error);
