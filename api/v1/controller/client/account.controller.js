@@ -204,10 +204,13 @@ module.exports.uploadImage = async (req, res) => {
 module.exports.edit = async (req, res) => {
   try {
     await Account.updateOne({ token: req.user.token }, req.body);
+    const newData = await Account.findOne({
+      token: req.user.token
+    });
     res.json({
       code: 200,
       message: "Cập nhật thông tin tài khoản thành công",
-      user: req.user
+      user: newData
     })
   } catch (error) {
     res.json({
