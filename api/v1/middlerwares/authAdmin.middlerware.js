@@ -1,20 +1,54 @@
 const Account = require('../models/account.model');
 const Role = require('../models/role.model');
 
+const getAccountHelper = require('../../../helper/getAccount.helper');
+
 module.exports.authAdmin = async (req, res, next) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
-    const user = await Account.findOne({
+    let account = await Account.findOne({
       token: token,
       deleted: false,
       status: "active"
     });
-    if (user) {
+    if (account) {
       const roleUser = await Role.findOne({
-        _id: user.role_id
+        _id: account.role_id
       });
-      req.user.title = roleUser.title;
-      req.user.permissions = roleUser.permissions;
+
+      let newAccount = {
+        id: account.id,
+        fullName: account.fullName,
+        email: account.email,
+        password: account.password,
+        token: account.token,
+        phone: account.phone,
+        avatar: account.avatar,
+        status: account.status,
+        address: account.address,
+        role_id: account.role_id
+      }
+      if (account.rank === 0) {
+        newAccount.rank = "đồng";
+      } else if (account.rank === 1) {
+        newAccount.rank = 'bạc';
+      } else if (account.rank === 2) {
+        newAccount.rank = 'vàng';
+      } else {
+        newAccount.rank = 'kim cương';
+      }
+
+      const role = await Role.findOne({
+        _id: account.role_id,
+        deleted: false
+      }).select("title permissions");
+
+      if (role) {
+        newAccount.title = role.title;
+        newAccount.permissions = role.permissions;
+      }
+
+      req.user = newAccount;
       next();
     }
     else {
