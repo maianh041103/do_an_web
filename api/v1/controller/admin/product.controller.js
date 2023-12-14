@@ -60,6 +60,22 @@ module.exports.add = async (req, res) => {
   }
 }
 
+//[PATCH] /admin/products/uploadImage
+module.exports.uploadImage = async (req, res) => {
+  try {
+    res.json({
+      code: 200,
+      message: "Upload ảnh thành công",
+      images: req.body.images
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Upload ảnh thất bại"
+    });
+  }
+}
+
 //[PATCH] /admin/products/edit/:id
 module.exports.edit = async (req, res) => {
   try {
