@@ -1,23 +1,20 @@
 const Account = require('../../models/account.model');
 const Role = require('../../models/role.model');
 
+const getAccountHelper = require('../../../../helper/getAccount.helper');
 //[GET] /admin/accounts
 module.exports.index = async (req, res) => {
   try {
     const listAccount = await Account.find({
       deleted: false
     });
+    let newListAccount = [];
     for (const account of listAccount) {
-      const role = await Role.findOne({
-        _id: account.role_id,
-        deleted: false
-      }).select("title permissions");
-      if (role) {
-        account.role = role;
-      }
+      let newAccount = await getAccountHelper.getAccount(account);
+      newListAccount.push(newAccount);
     }
     res.json({
-      listAccount: listAccount
+      listAccount: newListAccount
     });
   } catch (error) {
     console.log(error);
@@ -34,12 +31,9 @@ module.exports.detail = async (req, res) => {
     const account = await Account.findOne({
       _id: req.params.id
     });
-    const role = await Role.findOne({
-      _id: account.role_id
-    }).select("title permissions");
-    account.role = role;
+    let newAccount = await getAccountHelper.getAccount(account);
     res.json({
-      account: account
+      account: newAccount
     });
   } catch (error) {
     res.json({
@@ -52,6 +46,11 @@ module.exports.detail = async (req, res) => {
 //[PATCH] /admin/accounts/edit/:id
 module.exports.edit = async (req, res) => {
   try {
+    const updatedBy = {
+      account_id: req.user.id,
+      updatedAt: new Date()
+    }
+    req.body.updatedBy = updatedBy;
     await Account.updateOne({
       _id: req.params.id
     }, req.body);
@@ -75,11 +74,16 @@ module.exports.edit = async (req, res) => {
 //[DELETE] /admin/accounts/delete/:id
 module.exports.delete = async (req, res) => {
   try {
+    const deletedBy = {
+      account_id: req.user.id,
+      deletedAt: new Date()
+    }
     await Account.updateOne({
       _id: req.params.id
     }, {
       deleted: true,
-      deletedAt: new Date()
+      deletedAt: new Date(),
+      deletedBy: deletedBy
     });
     res.json({
       code: 200,
