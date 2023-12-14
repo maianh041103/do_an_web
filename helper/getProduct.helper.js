@@ -4,7 +4,7 @@ const calcPriceNew = require('./calcPriceNew.helper');
 const minPriceHelper = require('./findMinPrice.helper');
 const productsBestSellerHelper = require('./productBestSeller.helper');
 
-module.exports.getProduct = async (product)=>{
+module.exports.getProduct = async (product) => {
   let newProduct = {
     _id: product.id,
     title: product.title,
@@ -20,6 +20,7 @@ module.exports.getProduct = async (product)=>{
     deleted: product.deleted,
     slug: product.slug,
     rate: product.rate,
+    productCategoryId: product.productCategoryId,
     discountPercent: product.discountPercent
   }
 

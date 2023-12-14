@@ -78,6 +78,7 @@ module.exports.getListProductsCart = async (listProductId) => {
       priceNew: inforProduct.priceNew,
       //minPrice: inforProduct.minPrice,
       //buyed: inforProduct.buyed,
+      productCategoryId: inforProduct.productCategoryId,
       productCategoryTitle: inforProduct.productCategoryTitle
     }
     if (listProductId[i].childTitle !== "none") {
@@ -124,7 +125,6 @@ module.exports.getListProductAdmin = async (products) => {
         deletedAt: product.deletedBy.deletedAt
       }
     }
-
 
     const accountCreated = await Account.findOne({
       _id: product.createdBy.account_id
