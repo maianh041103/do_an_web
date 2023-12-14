@@ -191,6 +191,22 @@ module.exports.edit = async (req, res) => {
   }
 }
 
+//[PATCH] /admin/productCategory/uploadImages
+module.exports.uploadImage = async (req, res) => {
+  try {
+    res.json({
+      code: 200,
+      message: "Upload ảnh thành công",
+      avatar: req.body.avatar
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Upload ảnh thất bại"
+    });
+  }
+}
+
 //[DELETE] /admin/productCategory/delete/:id
 module.exports.deleteItem = async (req, res) => {
   try {
