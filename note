@@ -1,0 +1,107 @@
+Phần đã làm
+- Trang Home
+- Trang Product: Lọc theo cate,price,rate, tìm kiếm theo title, sắp xếp theo các tiêu chí, phân trang
+- Trang Product detail bao gồm cả feedback
+- Thêm feedback cho Product
+- Hiển thị general setting
+
+Phần cần làm
+- Bên client: 
+  + Thêm, xóa sản phẩm yêu thích                                                      Success
+  + Thêm, sửa, xóa sản phẩm trong giỏ hàng có check số lượng trước khi thêm           Success
+  + Xem giỏ hàng (xem trên postman k hiển thị nhưng in ra thì có rồi)                 Success
+  + Đặt hàng                                                                          Success
+  + Thanh toán                                                                        Success
+  + Thanh tóan thành công xóa sp đã mua trong giỏ hàng, cập nhật số lượng sp còn      Sucesss
+  + Huỷ đơn hàng, cập nhật số lượng hàng sau khi hủy                                  Success
+  + Hiển thị lịch sử đơn hàng                                                         Success
+  + Hiển thị trạng thái chi tiết mua hàng (trạng thái giao, thông tin đơn đặt hàng)   Success
+  + Cập nhật mức rank sau khi mua hàng                                                Success
+  + Chỉnh sửa phẩn đánh giá                                                           Success
+  + Thêm discountPercent cho sản phẩm, lưu giá mới                                    Success
+        product-detail , product-compare , home , historyPurchase-view , 
+        historyPurchase- detail, cart-view, checkout-success, 
+        product-view-admin
+  + Phần comment chưa check statusComment của sản phẩm trong order                    Success
+  + Sửa phần role_id sau khi thêm tài khoản                                           Success
+  + Trang dashboard (Giống trang tôi của shopee)
+  + Upload ảnh
+- Bên admin :
+  + Trang dashboard bên admin
+  + Thêm, sửa, xóa danh mục sản phẩm                                                  Success
+  + Thêm route private
+  + Thêm, sửa, xóa sản phẩm                                                           Success
+  + Thêm, sửa, xóa nhóm quyền                                                         Success
+  + Phân quyền cho tài khoản                                                          Success
+  + Xem, sửa, xóa tài khoản                                                           Success
+  + Sửa trang general setting                                                         Success
+  + Quản lý đơn đặt hàng của khách hàng                                               Success
+  + Cập nhật trạng thái giao hàng của đơn hàng                                        Success
+  + Xóa phần feedback
+  + Ghi log lịch sử
+  + Upload ảnh
+- Phần chung :
+  + Đăng ký                                                                           Success
+  + Đăng nhập                                                                         Success
+  + Quên mật khẩu                                                                     Success
+  + Chỉnh sửa thông tin tài khoản                                                     Success
+  + Đổi mật khẩu                                                                      Success
+  + Đăng xuất                                                                         Success
+  + Làm route private                                                                 Success
+  + Trả thêm phần tên quyền là permissions                                            Success
+
+- Sửa phần lấy lại dữ liệu : product, favorite
+
+- Phần phân quyền
+  products-category_view
+  products-category_create
+  products-category_edit
+  products-category_delete
+
+  products_view
+  products_create
+  products_edit
+  products_delete
+
+  roles_view
+  roles_create
+  roles_edit
+  roles_delete
+  roles_permissions
+
+  account_view
+  account_create
+  account_edit
+  account_delete
+
+  order_view
+  order_edit
+
+  comment-delete
+
+  setting-general_view
+  setting-general_edit
+
+  chat
+
+
+  "products-category_view","products-category_create","products-category_edit","products-category_delete","products_view","products_create","products_edit","products_delete","roles_view","roles_create","roles_edit","roles_delete","roles_permissions","account_view","account_create","account_edit","account_delete","order_view","order_edit","comment-delete","setting-general_view","setting-general_edit","chat"
+
+  "products-category_view","products-category_create","products-category_edit","products_view","products_create","products_edit","comment-delete"
+
+  "order_view","order_edit"
+
+
+
+- Sửa
+ + Product detail
+ + Home
+ + Favorite
+ + Cart
+ + Checkout
+
+
+
+
+- Chú ý : 
+ + Hàm getListProductHelper là hàm async await
