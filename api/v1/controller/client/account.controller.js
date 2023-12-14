@@ -3,6 +3,7 @@ const Role = require('../../models/role.model.js');
 const ForgotPassword = require('../../models/forgotPassword.model.js');
 const generateHelper = require('../../../../helper/generate.helper');
 const sendEmailHelper = require('../../../../helper/sendEmail.helper');
+const getAccoutHelper = require('../../../../helper/getAccount.helper.js');
 
 const md5 = require('md5');
 
@@ -31,7 +32,7 @@ module.exports.register = async (req, res) => {
 
 //[POST] /api/v1/account/login
 module.exports.login = async (req, res) => {
-  const user = await Account.findOne({
+  let user = await Account.findOne({
     email: req.body.email
   });
 
@@ -50,6 +51,8 @@ module.exports.login = async (req, res) => {
     })
     return;
   }
+
+  user = await getAccoutHelper.getAccount(user);
 
   res.cookie("token", user.token);
 
@@ -203,15 +206,27 @@ module.exports.uploadImage = async (req, res) => {
 //[PATCH] /api/v1/account/edit
 module.exports.edit = async (req, res) => {
   try {
-    await Account.updateOne({ token: req.user.token }, req.body);
-    const newData = await Account.findOne({
-      token: req.user.token
+    const email = req.body.email;
+    const emailExists = await Account.findOne({
+      email: email
     });
-    res.json({
-      code: 200,
-      message: "Cập nhật thông tin tài khoản thành công",
-      user: newData
-    })
+    if (emailExists) {
+      res.json({
+        code: 400,
+        message: "Email đã tồn tại"
+      })
+    }
+    else {
+      await Account.updateOne({ token: req.user.token }, req.body);
+      const newData = await Account.findOne({
+        token: req.user.token
+      });
+      res.json({
+        code: 200,
+        message: "Cập nhật thông tin tài khoản thành công",
+        user: newData
+      })
+    }
   } catch (error) {
     res.json({
       code: 400,
