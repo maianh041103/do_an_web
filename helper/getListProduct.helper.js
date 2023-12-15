@@ -57,8 +57,7 @@ module.exports.getListProductsCart = async (listProductId) => {
       quantity: listProductId[i].quantity
     }
     let inforProduct = await Product.findOne({
-      _id: listProductId[i].product_id,
-      deleted: false
+      _id: listProductId[i].product_id
     });
     inforProduct = await getProductHelper.getProduct(inforProduct);
     let newInforProduct = {
