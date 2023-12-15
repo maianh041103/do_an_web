@@ -5,6 +5,7 @@ const FeedBack = require('../../models/feedback.model');
 const Discount = require('../../models/discount.model');
 
 const calcTotalPriceOrderHelper = require('../../../../helper/calcTotalPriceOrder.helper');
+const getListProductHelper = require('../../../../helper/getListProduct.helper');
 
 //[GET] /admin/orders/
 module.exports.index = async (req, res) => {
@@ -16,29 +17,17 @@ module.exports.index = async (req, res) => {
     });
     let newListOrder = [];
     for (const order of listOrder) {
+      let products = await getListProductHelper.getListProductsCart(order.products);
       let newOrder = {
         id: order.id,
         cart_id: order.cart_id,
         userInfo: order.userInfo,
-        products: order.products,
+        products: products,
         discountId: order.discountId,
         statusOrder: order.statusOrder,
         paymentMethod: order.paymentMethod,
         deleted: order.deleted,
-        updateTime: order.updateTime,
-        createdAt: order.createdAt,
-        updatedAt: order.updatedAt
-      }
-      if (order.updatedBy.account_id) {
-        const account = await Account.findOne({
-          _id: order.updatedBy.account_id
-        }).select("fullName");
-
-        newOrder.updatedBy = {
-          fullName: account.fullName,
-          account_id: order.updatedBy.account_id,
-          updatedAt: order.updatedBy.updatedAt
-        }
+        updateTime: order.updateTime
       }
       newListOrder.push(newOrder);
     }
