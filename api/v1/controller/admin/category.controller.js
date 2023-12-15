@@ -79,6 +79,7 @@ module.exports.detail = async (req, res) => {
     });
     let newProductCategory = {
       title: productCategory.title,
+      parentId: productCategory.parentId,
       description: productCategory.description,
       image: productCategory.image,
       status: productCategory.status,
