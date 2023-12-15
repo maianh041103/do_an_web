@@ -31,7 +31,8 @@ module.exports.view = async (req, res) => {
         statusOrder: order.statusOrder,
         paymentMethod: order.paymentMethod,
         deleted: order.deleted,
-        updateTime: order.updateTime
+        updateTime: order.updateTime,
+        createdAt: order.createdAt
       }
       newListOrder.push(newOrder);
     }
