@@ -114,7 +114,7 @@ module.exports.detail = async (req, res) => {
       if (accountUpdate) {
         newProductCategory.updatedBy = {
           accountName: accountUpdate.fullName,
-          updatedAt: productCategory.updatedAt.updatedAt
+          updatedAt: productCategory.updatedBy.updatedAt
         }
       }
     }
