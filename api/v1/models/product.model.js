@@ -26,7 +26,10 @@ const productSchema = new mongoose.Schema({
   featured: String,
   status: String,
   properties: Array, //chứa các thuộc tính của sản phẩm thuộc danh mục trên
-  rate: Number,
+  rate: {
+    type: Number,
+    default: 0
+  },
   deleted: {
     type: Boolean,
     default: false
