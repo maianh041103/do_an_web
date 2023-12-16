@@ -26,7 +26,8 @@ module.exports.getListProduct = async (products) => {
       deleted: product.deleted,
       slug: product.slug,
       rate: product.rate,
-      discountPercent: product.discountPercent
+      discountPercent: product.discountPercent,
+      productCategoryId: product.productCategoryId,
     }
 
     newProduct = calcPriceNew.calc(newProduct);
@@ -119,6 +120,7 @@ module.exports.getListProductAdmin = async (products) => {
       slug: product.slug,
       rate: product.rate,
       discountPercent: product.discountPercent,
+      productCategoryId: product.productCategoryId,
       deletedBy: {
         account_id: product.deletedBy.account_id,
         deletedAt: product.deletedBy.deletedAt
