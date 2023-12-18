@@ -127,6 +127,7 @@ module.exports.otp = async (req, res) => {
 
 //[PATCH] /api/v1/account/forgot/reset
 module.exports.reset = async (req, res) => {
+  console.log("OK");
   const password = req.body.password;
   const email = req.body.email;
 
@@ -151,12 +152,10 @@ module.exports.reset = async (req, res) => {
   }
 
   await Account.updateOne({
-    token: token
+    email: email
   }, {
     password: md5(password)
   });
-
-  res.cookie("token", token);
 
   res.json({
     code: 200,
@@ -259,7 +258,7 @@ module.exports.oldPassword = async (req, res) => {
 }
 
 //[PATCH] /api/v1/change-password/reset
-module.exports.reset = async (req, res) => {
+module.exports.resetChangePasword = async (req, res) => {
   try {
     const newPassword = req.body.password;
     await Account.updateOne({

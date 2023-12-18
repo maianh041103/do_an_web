@@ -29,7 +29,7 @@ route.patch('/edit', authMiddlerware.authMiddler, controller.edit);
 
 route.post('/change-password/old-password', authMiddlerware.authMiddler, controller.oldPassword);
 
-route.patch('/change-password/reset', authMiddlerware.authMiddler, controller.reset);
+route.patch('/change-password/resetChangePasword', authMiddlerware.authMiddler, controller.reset);
 
 route.get('/logout', authMiddlerware.authMiddler, controller.logout);
 module.exports = route;
