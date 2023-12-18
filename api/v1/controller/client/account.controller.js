@@ -128,10 +128,10 @@ module.exports.otp = async (req, res) => {
 //[PATCH] /api/v1/account/forgot/reset
 module.exports.reset = async (req, res) => {
   const password = req.body.password;
-  const token = req.body.token;
+  const email = req.body.email;
 
   const user = await Account.findOne({
-    token: token
+    email: email
   });
 
   if (!user) {
