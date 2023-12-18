@@ -9,18 +9,18 @@ module.exports.sendEmail = (emailFrom, emailTo, subject, html) => {
     },
   });
 
-  var mailOption = {
+  var mailOptions = {
     from: emailFrom,
     to: emailTo,
     subject: subject,
     html: html
   }
 
-  transporter.sendMail(mailOption, (error, info) => {
+  transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
     } else {
-      console.log(info.response);
+      console.log('Email sent: ' + info.response);
     }
   });
 
