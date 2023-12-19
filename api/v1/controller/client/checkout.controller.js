@@ -35,7 +35,7 @@ module.exports.checkout = async (req, res) => {
   const listDiscount = await Discount.find({
     deleted: false,
     conditionRank: { $lte: req.user.rank },
-    specialDay: specialDay
+    $or: [{ specialDay: specialDay }, { specialDay: "normal" }]
   });
   //End lấy ra mã giảm giá
 

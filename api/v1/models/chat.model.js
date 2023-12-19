@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const chatSchema = new mongoose.Schema({
-  account_id: String,
+  account_send: String,
+  account_receive: String,
   content: String,
   images: Array,
   deleted: {

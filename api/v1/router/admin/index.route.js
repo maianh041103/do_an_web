@@ -13,13 +13,13 @@ const updateStatusOrderMiddlerware = require('../../middlerwares/updateOrderStat
 module.exports = (app) => {
   const version = '/api/v1';
   const PATH_ADMIN = systemConfig.prefixAdmin;
-  app.use(authMiddlerware.authMiddler);
-  app.use(authAdminMiddlerware.authAdmin);
+  //app.use(authMiddlerware.authMiddler);
+  //app.use(authAdminMiddlerware.authAdmin);
   app.use(updateStatusOrderMiddlerware.updateOrderStatus);
-  app.use(`${version}${PATH_ADMIN}/productCategory`, categoryRoute);
-  app.use(`${version}${PATH_ADMIN}/products`, productRoute);
-  app.use(`${version}${PATH_ADMIN}/roles`, roleRoute);
-  app.use(`${version}${PATH_ADMIN}/accounts`, accountRoute);
-  app.use(`${version}${PATH_ADMIN}/orders`, orderRoute);
-  app.use(`${version}${PATH_ADMIN}/settings`, settingRoute);
+  app.use(`${version}${PATH_ADMIN}/productCategory`, authMiddlerware.authMiddler, authAdminMiddlerware.authAdmin, categoryRoute);
+  app.use(`${version}${PATH_ADMIN}/products`, authMiddlerware.authMiddler, authAdminMiddlerware.authAdmin, productRoute);
+  app.use(`${version}${PATH_ADMIN}/roles`, authMiddlerware.authMiddler, authAdminMiddlerware.authAdmin, roleRoute);
+  app.use(`${version}${PATH_ADMIN}/accounts`, authMiddlerware.authMiddler, authAdminMiddlerware.authAdmin, accountRoute);
+  app.use(`${version}${PATH_ADMIN}/orders`, authMiddlerware.authMiddler, authAdminMiddlerware.authAdmin, orderRoute);
+  app.use(`${version}${PATH_ADMIN}/settings`, authMiddlerware.authMiddler, authAdminMiddlerware.authAdmin, settingRoute);
 }

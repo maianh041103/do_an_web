@@ -56,4 +56,3 @@ module.exports = Order;
 // Chờ giao hàng : 2
 // Hoàn thành : 3
 // Đã hủy : 4
-// Hoàn trả hàng : 5
