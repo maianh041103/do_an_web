@@ -12,13 +12,15 @@ module.exports.index = async (req, res) => {
     accountId: req.user.id
   });
   let listProduct = [];
-  for (let item of listProductsFavorite.productId) {
-    const product = await Product.findOne({
-      _id: item
-    });
-    
-    let newProduct = await getProductHelper.getProduct(product);
-    listProduct.push(newProduct);
+  if (listProductsFavorite) {
+    for (let item of listProductsFavorite.productId) {
+      const product = await Product.findOne({
+        _id: item
+      });
+
+      let newProduct = await getProductHelper.getProduct(product);
+      listProduct.push(newProduct);
+    }
   }
   res.json({
     code: 200,
