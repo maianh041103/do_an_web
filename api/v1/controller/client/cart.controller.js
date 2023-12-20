@@ -14,7 +14,7 @@ module.exports.index = async (req, res) => {
 
   //Truyền vào product_id in ra giá mới, giá cũ, giảm giá,...
   let products = [];
-  for (let i = 0; i < cart.products.length; i++) {
+  for (let i = 0; i < cart?.products?.length; i++) {
     let product = {
       product_id: cart.products[i].product_id,
       childTitle: cart.products[i].childTitle,
@@ -55,7 +55,7 @@ module.exports.index = async (req, res) => {
   //End
 
   let newCart = {
-    account_id: cart.account_id,
+    account_id: cart?.account_id,
     products: products
   }
 
