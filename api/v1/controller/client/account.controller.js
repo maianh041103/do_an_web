@@ -205,10 +205,16 @@ module.exports.uploadImage = async (req, res) => {
 //[PATCH] /api/v1/account/edit
 module.exports.edit = async (req, res) => {
   try {
+    const accountUpdate = await Account.findOne({
+      token: req.user.token
+    });
+
     const email = req.body.email;
     const emailExists = await Account.findOne({
+      _id: { $ne: accountUpdate.id },
       email: email
     });
+
     if (emailExists) {
       res.json({
         code: 400,
