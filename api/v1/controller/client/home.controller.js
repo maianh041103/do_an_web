@@ -43,7 +43,7 @@ module.exports.productBestSellers = async (req, res) => {
     })
     res.json({
       code: 200,
-      newProductBestSellers: newProductBestSellers
+      newProduct: newProductBestSellers
     })
   } catch (error) {
     res.json({
@@ -66,7 +66,7 @@ module.exports.productFeatureds = async (req, res) => {
     let newProductFeatureds = await getListProductHelper.getListProduct(productFeatureds);
     res.json({
       code: 200,
-      newProductFeatureds: newProductFeatureds
+      newProduct: newProductFeatureds
     })
   } catch (error) {
     res.json({
@@ -89,7 +89,7 @@ module.exports.productBestRate = async (req, res) => {
     ///End lấy sản phẩm sản phẩm theo rate
     res.json({
       code: 200,
-      newProductBestRate: newProductBestRate
+      newProduct: newProductBestRate
     })
   } catch (error) {
     res.json({
