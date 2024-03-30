@@ -7,9 +7,7 @@ module.exports = (app) => {
   const version = '/api/v1';
   const PATH_ADMIN = systemConfig.prefixAdmin;
 
-  app.use(authChatMiddlerware.authChat);
+  app.use(`${version}${PATH_ADMIN}/chat`, authChatMiddlerware.authChat, chatAdminRoute);
 
-  app.use(`${version}${PATH_ADMIN}/chat`, chatAdminRoute);
-
-  app.use(`${version}/chat`, chatClientRoute);
+  app.use(`${version}/chat`, authChatMiddlerware.authChat, chatClientRoute);
 }
