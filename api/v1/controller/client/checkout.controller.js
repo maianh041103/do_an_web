@@ -48,6 +48,30 @@ module.exports.checkout = async (req, res) => {
   });
 }
 
+//[GET] /api/v1/checkout/discount
+module.exports.getDiscount = async (req, res) => {
+  //Lấy ra mã giảm giá 
+  const dateBuy = new Date();
+  const day = dateBuy.getDate();
+  const month = dateBuy.getMonth() + 1;
+  let specialDay = "";
+  if (day === month) {
+    specialDay = "special";
+  } else {
+    specialDay = "normal";
+  }
+  const listDiscount = await Discount.find({
+    deleted: false,
+    conditionRank: { $lte: req.user.rank },
+    $or: [{ specialDay: specialDay }, { specialDay: "normal" }]
+  });
+
+  res.json({
+    listDiscount: listDiscount,
+  });
+  //End lấy ra mã giảm giá
+}
+
 //[POST] /api/v1/checkout/success
 module.exports.order = async (req, res) => {
   try {

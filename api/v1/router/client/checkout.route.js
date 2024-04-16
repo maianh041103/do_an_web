@@ -5,6 +5,8 @@ const route = express.Router();
 
 route.post('/', controller.checkout);
 
+route.get("/discount", controller.getDiscount);
+
 route.post('/success', controller.order);
 
 module.exports = route;
